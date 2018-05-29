@@ -38,13 +38,15 @@ var playState = {
 		map = game.add.tilemap();
 		map.addTilesetImage('sheet_tiles');
 		
-		layer0 = map.create('level0', 10, 10, 16, 16);
+		var size = 50;
+		
+		layer0 = map.create('level0', size, size, 16, 16);
     	layer0.scrollFactorX = 0.5;
     	layer0.scrollFactorY = 0.5;
 		layer0.resizeWorld();
 		
-		for (var i = 0; i < 10; i++) { 
-			for (var j = 0; j < 10; j++) { 
+		for (var i = 0; i < size; i++) { 
+			for (var j = 0; j < size; j++) { 
 				map.putTile(i, i, j, layer0);
 			}
 		}
