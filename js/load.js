@@ -11,7 +11,11 @@ var loadState = {
 		//game.load.image('bg_starField', 'res/scenery/bg_starField.png');
 		
         //Animations
-        game.load.spritesheet('sheet_tiles', 'res/tiles/roguelikeIndoor_transparent.png', 16, 16, -1, 1, 0);
+        game.load.image('tiles_roguelike', 'res/tiles/roguelikeSheet_transparent.png');
+        game.load.image('tiles_roguelikeIndoor', 'res/tiles/roguelikeIndoor_transparent.png');
+        game.load.tilemap('map_bookshop_building', 'res/maps/bookshop_building.csv');
+        game.load.tilemap('map_bookshop_fixtures', 'res/maps/bookshop_fixtures.csv');
+        game.load.tilemap('map_bookshop_furniture', 'res/maps/bookshop_furniture.csv');
         
 		/* AUDIO */
 		//game.load.audio('music_airshipSerenity', 'res/audio/Airship Serenity.mp3');

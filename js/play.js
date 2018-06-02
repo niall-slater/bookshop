@@ -7,6 +7,8 @@ var groupItems;
 
 //Tilemap layers
 var layer0;
+var layer1;
+var layer2;
 
 
 //Scenery & Objects
@@ -21,9 +23,6 @@ var playState = {
     //State Information
 	
 	preload: function() {
-		groupBackground = game.add.group();
-		groupCharacters = game.add.group();
-        groupItems = game.add.group();
 		
 		//Slick UI library
 		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
@@ -33,23 +32,16 @@ var playState = {
 
 	create: function () {
 		
-		game.stage.backgroundColor = '#2d2d2d';
+		game.stage.backgroundColor = '#3fa7ff';
 		
-		map = game.add.tilemap();
-		map.addTilesetImage('sheet_tiles');
-		
-		layer0 = map.create('level0', 10, 10, 16, 16);
-    	layer0.scrollFactorX = 0.5;
-    	layer0.scrollFactorY = 0.5;
-		layer0.resizeWorld();
-		
-		for (var i = 0; i < 10; i++) { 
-			for (var j = 0; j < 10; j++) { 
-				map.putTile(i, i, j, layer0);
-			}
-		}
+		map = game.add.tilemap('map_bookshop_building', 16, 16);
+		map.addTilesetImage('roguelike_transparent.tsx', 'tiles_roguelike', 16, 16, 0, 1);
+		map.addTilesetImage('roguelikeIndoor_transparent.tsx', 'tiles_roguelike', 16, 16, 0, 1);
 
+		//  Create our layer
 		
+		layer0 = map.createLayer(0);
+		layer0.resizeWorld();
 		
 	},
 	
