@@ -9,8 +9,10 @@ var loadState = {
 		
 		//Scenery & Objects
         game.load.image('tiles_roguelike', 'res/tiles/roguelikeSheet_transparent.png');
-        game.load.image('tiles_roguelikeIndoor', 'res/tiles/roguelikeIndoor_transparent.png');
         game.load.tilemap('map_bookshop_building', 'res/maps/bookshop.json', null, Phaser.Tilemap.TILED_JSON);
+		
+		//Characters
+        game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, 0, 1);
         
 		/* AUDIO */
 		//game.load.audio('music_airshipSerenity', 'res/audio/Airship Serenity.mp3');
