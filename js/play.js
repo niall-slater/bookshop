@@ -34,19 +34,17 @@ var playState = {
 		
 		game.stage.backgroundColor = '#3fa7ff';
 		
-		map = game.add.tilemap('map_bookshop_building', 16, 16);
-		map.addTilesetImage('roguelike_transparent.tsx', 'tiles_roguelike', 16, 16, 0, 1);
-		map.addTilesetImage('roguelikeIndoor_transparent.tsx', 'tiles_roguelike', 16, 16, 0, 1);
+		map = game.add.tilemap('map_bookshop_building');
+		map.addTilesetImage('roguelike_general', 'tiles_roguelike');
+		map.addTilesetImage('roguelikeIndoor_transparent', 'tiles_roguelike');
 
 		//  Create our layer
 		
-		layer0 = map.createLayer(0);
+		layer0 = map.createLayer('building');
 		layer0.resizeWorld();
-		
-		layer1 = map.createLayer(1);
+		layer1 = map.createLayer('fixtures');
 		layer1.resizeWorld();
-		
-		layer2 = map.createLayer(2);
+		layer2 = map.createLayer('furniture');
 		layer2.resizeWorld();
 		
 	},

@@ -8,14 +8,9 @@ var loadState = {
 		/* SPRITES */
 		
 		//Scenery & Objects
-		game.load.tilemap('map_bookshop0', 'res/tiles/map_bookshop0.csv');
-		
-        //Animations
         game.load.image('tiles_roguelike', 'res/tiles/roguelikeSheet_transparent.png');
         game.load.image('tiles_roguelikeIndoor', 'res/tiles/roguelikeIndoor_transparent.png');
-        game.load.tilemap('map_bookshop_building', 'res/maps/bookshop_building.csv');
-        game.load.tilemap('map_bookshop_fixtures', 'res/maps/bookshop_fixtures.csv');
-        game.load.tilemap('map_bookshop_furniture', 'res/maps/bookshop_furniture.csv');
+        game.load.tilemap('map_bookshop_building', 'res/maps/bookshop.json', null, Phaser.Tilemap.TILED_JSON);
         
 		/* AUDIO */
 		//game.load.audio('music_airshipSerenity', 'res/audio/Airship Serenity.mp3');

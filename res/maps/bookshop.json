@@ -219,12 +219,30 @@
  "tileheight":16,
  "tilesets":[
         {
+         "columns":26,
          "firstgid":1,
-         "source":"..\/..\/..\/_tiled\/roguelikeIndoor_transparent.tsx"
+         "image":"..\/tiles\/roguelikeIndoor_transparent.png",
+         "imageheight":305,
+         "imagewidth":457,
+         "margin":0,
+         "name":"roguelikeIndoor_transparent",
+         "spacing":1,
+         "tilecount":468,
+         "tileheight":16,
+         "tilewidth":16
         }, 
         {
+         "columns":57,
          "firstgid":469,
-         "source":"..\/..\/..\/_tiled\/roguelike_transparent.tsx"
+         "image":"..\/tiles\/roguelikeSheet_transparent.png",
+         "imageheight":526,
+         "imagewidth":968,
+         "margin":0,
+         "name":"roguelike_general",
+         "spacing":1,
+         "tilecount":1767,
+         "tileheight":16,
+         "tilewidth":16
         }],
  "tilewidth":16,
  "type":"map",
