@@ -36,7 +36,6 @@ var playState = {
 		
 		map = game.add.tilemap('map_bookshop_building');
 		map.addTilesetImage('roguelike_general', 'tiles_roguelike');
-		map.addTilesetImage('roguelikeIndoor_transparent', 'tiles_roguelike');
 
 		//  Create our layer
 		
