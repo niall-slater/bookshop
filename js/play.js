@@ -14,7 +14,6 @@ var layer2;
 //Scenery & Objects
 var map;
 
-
 //UI
 var slickUI;
 
