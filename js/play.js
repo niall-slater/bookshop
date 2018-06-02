@@ -43,6 +43,12 @@ var playState = {
 		layer0 = map.createLayer(0);
 		layer0.resizeWorld();
 		
+		layer1 = map.createLayer(1);
+		layer1.resizeWorld();
+		
+		layer2 = map.createLayer(2);
+		layer2.resizeWorld();
+		
 	},
 	
 	update: function() {

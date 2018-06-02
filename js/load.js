@@ -8,7 +8,7 @@ var loadState = {
 		/* SPRITES */
 		
 		//Scenery & Objects
-		//game.load.image('bg_starField', 'res/scenery/bg_starField.png');
+		game.load.tilemap('map_bookshop0', 'res/tiles/map_bookshop0.csv');
 		
         //Animations
         game.load.image('tiles_roguelike', 'res/tiles/roguelikeSheet_transparent.png');
