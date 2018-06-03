@@ -57,7 +57,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup name="objects" visible="0">
+ <objectgroup name="nav" visible="0">
   <object id="12" name="point_buy" x="280.5" y="88">
    <point/>
   </object>

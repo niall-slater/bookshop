@@ -12,7 +12,8 @@ var loadState = {
         game.load.tilemap('map_bookshop_building', 'res/maps/bookshop.json', null, Phaser.Tilemap.TILED_JSON);
 		
 		//Characters
-        game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, 0, 1);
+		let maxChars = 17; //this is the number of characters in the spritesheet
+        game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, maxChars, 0, 1);
         
 		/* AUDIO */
 		//game.load.audio('music_airshipSerenity', 'res/audio/Airship Serenity.mp3');
