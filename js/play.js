@@ -1,5 +1,6 @@
 /* GLOBALS */
 
+
 //Groups
 var groupBackground;
 var groupCharacters;
@@ -26,10 +27,14 @@ var playState = {
 		//Slick UI library
 		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
 		slickUI.load('res/ui/kenney/kenney.json');
-		
 	},
 
 	create: function () {
+		
+		game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL; //resize your window to see the stage resize too
+		game.scale.setShowAll();
+		game.scale.refresh();
+
 		
 		game.stage.backgroundColor = '#3fa7ff';
 		

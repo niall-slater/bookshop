@@ -1,4 +1,7 @@
-var game = new Phaser.Game(window.innerWidth * window.devicePixelRatio, window.innerHeight * window.devicePixelRatio, 'game', false, false);
+var mapWidthDefault = 352;
+var mapHeightDefault = 224;
+
+var game = new Phaser.Game(mapWidthDefault, mapHeightDefault, 'game', false, false);
 
 game.antialias = false;
 
