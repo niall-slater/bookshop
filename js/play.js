@@ -39,6 +39,7 @@ var playState = {
     //State Information
 	
 	preload: function() {
+        
 		
 		//Slick UI library
 		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
@@ -83,14 +84,16 @@ var playState = {
 	
     spawnCustomer: function() {
 		
-		let maxChars = 17; //this is the number of characters in the spritesheet
+		let maxChars = 15; //this is the number of characters in the spritesheet
 		let selector = Math.floor(Math.random() * maxChars);
 		
-		let customer = game.add.sprite(point_enter.x - 8, point_enter.y - 8, 'sprites_characters');
+		//let customer = game.add.sprite(point_enter.x - 8, point_enter.y - 8, 'sprites_characters');
 		
+        let customer = new Customer(game, selector, point_enter.x, point_enter.y);
+        
 		groupCharacters.add(customer);
 		
-		customer.frame = selector;
+		//customer.frame = selector;
 		
 		//TODO: Move customer into own class so they can have an action queue
 		game.add.tween(customer).to({ x: point_get.x - 8, y: point_get.y - 8 }, 3000, Phaser.Easing.Linear.None, true);
@@ -111,3 +114,24 @@ var playState = {
     }
 	
 };
+
+class Customer extends Phaser.Sprite {
+    
+    constructor(game, spriteIndex, x, y) {
+        super (game, 0, 0);
+         
+        Phaser.Sprite.call(this, game, x, y, 'sprites_characters');
+
+        this.frame = spriteIndex;
+
+        this.anchor.setTo(0.5, 0.5);
+
+        game.add.existing(this);
+
+    }
+    
+    update() {
+        
+    }
+    
+}
