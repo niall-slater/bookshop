@@ -70,7 +70,8 @@ var playState = {
 		layer2.resizeWorld();
 		
 		game.world.bringToTop(groupCharacters);
-		setInterval(this.spawnCustomer, 2000);
+		//setInterval(this.spawnCustomer, 2000);
+        this.spawnCustomer();
 		
 	},
 	
@@ -91,12 +92,19 @@ var playState = {
 		
         let customer = new Customer(game, selector, point_enter.x, point_enter.y);
         
+        /* Initialising this here feels very wrong. TODO: Find out how to declare variables inside the customer class without an error */
+        customer.behaviours = {
+            BROWSE: 0,
+            BUY: 1,
+            LEAVE: 2
+        };
+        
+        customer.behaviour_current = customer.behaviours.BROWSE;
+        /* */
+        
 		groupCharacters.add(customer);
+        
 		
-		//customer.frame = selector;
-		
-		//TODO: Move customer into own class so they can have an action queue
-		game.add.tween(customer).to({ x: point_get.x - 8, y: point_get.y - 8 }, 3000, Phaser.Easing.Linear.None, true);
 	},
 	
     fullScreenToggle: function() {
@@ -118,20 +126,62 @@ var playState = {
 class Customer extends Phaser.Sprite {
     
     constructor(game, spriteIndex, x, y) {
-        super (game, 0, 0);
+        super(game, 0, 0);
          
         Phaser.Sprite.call(this, game, x, y, 'sprites_characters');
 
         this.frame = spriteIndex;
-
+        
         this.anchor.setTo(0.5, 0.5);
 
         game.add.existing(this);
-
+        game.physics.arcade.enable(this);
+        
+        //game.add.tween(this).to({ x: point_get.x, y: point_get.y}, 3000, Phaser.Easing.Linear.None, true);
     }
     
     update() {
         
+        switch (this.behaviour_current) {
+            case this.behaviours.BROWSE: {
+                game.physics.arcade.moveToXY(this, point_get.x, point_get.y, 50);
+                if (Math.abs(this.x - point_get.x) < 1 && Math.abs(this.y - point_get.y) < 1) {
+                    console.log("Book located");
+                    this.switchBehaviourBuy();
+                }
+                break;
+            }
+            case this.behaviours.BUY: {
+                game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
+                if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
+                    console.log("Book purchased");
+                    this.switchBehaviourLeave();
+                }
+                break;
+            }
+            case this.behaviours.LEAVE: {
+                game.physics.arcade.moveToXY(this, point_exit.x, point_exit.y, 50);
+                if (Math.abs(this.x - point_exit.x) < 1 && Math.abs(this.y - point_exit.y) < 1) {
+                    this.behaviour_current = -1;
+                    this.die();
+                }
+                break;
+            }
+        }
+        
     }
     
-}
+    switchBehaviourBuy() {
+        this.behaviour_current = 1;
+    }
+    
+    switchBehaviourLeave() {
+        this.behaviour_current = 2;
+    }
+    
+    die() {
+        console.log("Ded");
+        this.destroy();
+    }
+    
+};
