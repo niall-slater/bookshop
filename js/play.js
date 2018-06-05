@@ -14,6 +14,8 @@ var layer2;
 var map;
 
 //Nav
+var navPoints_books;
+
 var point_enter = {
 	x: 8,
 	y: 72
@@ -22,14 +24,13 @@ var point_exit = {
 	x: 8,
 	y: 120
 }
-var point_get = {
-	x: 200,
-	y: 70
-}
 var point_buy = {
 	x: 280,
 	y: 88
 }
+
+var spawnMax = 10000;
+var spawnTimer = spawnMax;
 
 //UI
 var slickUI;
@@ -69,14 +70,38 @@ var playState = {
 		layer2 = map.createLayer('furniture');
 		layer2.resizeWorld();
 		
+		//Load nav points
+		
+		navPoints_books = [
+			{x: 24, y: 56},
+			{x: 56, y: 56},
+			{x: 104, y: 56},
+			{x: 136, y: 56},
+			{x: 168, y: 56},
+			{x: 200, y: 56},
+			{x: 72, y: 72},
+			{x: 72, y: 120},
+			{x: 120, y: 72},
+			{x: 120, y: 120},
+			{x: 184, y: 72},
+			{x: 184, y: 120},
+			{x: 232, y: 120}
+		];		
+		//At this point I'm hardcoding them but the easiest dynamic way will be to read
+		//directly from the Tiled JSON export. Don't use the Phaser functions for this.
+		
 		game.world.bringToTop(groupCharacters);
-		setInterval(this.spawnCustomer, 400);
+		
+		game.time.events.loop(Phaser.Timer.SECOND * 4, this.spawnCustomer, this);
+
         this.spawnCustomer();
 		
 	},
 	
 	update: function() {
 		
+		//tick spawn timer
+		spawnTimer -= game.time.physicsElapsed;
 	},
 	
 	render: function() {
@@ -106,7 +131,12 @@ var playState = {
         {
             game.scale.startFullScreen(false);
         }
-    }
+    },
+	
+
+	getRandomNavPointBooks: function() {
+		return navPoints_books[Math.floor(Math.random() * navPoints_books.length)];
+	}
 	
 };
 
@@ -127,6 +157,7 @@ class Customer extends Phaser.Sprite {
             LEAVE: 2
         };
         this.behaviour_current = this.behaviours.BROWSE;
+		this.browseTarget = playState.getRandomNavPointBooks();
         
         this.bobMax = 1;
         this.bobTimer = 1;
@@ -141,6 +172,7 @@ class Customer extends Phaser.Sprite {
         
         //Add reference to this so we can use it in anonymous functions without problems
         var me = this;
+		//That said, this isn't necessary if using game.time.events.add instead of setTimeout, which you should be.
         
         this.bobTimer -= game.time.physicsElapsed;
         
@@ -152,10 +184,18 @@ class Customer extends Phaser.Sprite {
         
         switch (this.behaviour_current) {
             case this.behaviours.BROWSE: {
-                game.physics.arcade.moveToXY(this, point_get.x, point_get.y, 50);
-                if (Math.abs(this.x - point_get.x) < 1 && Math.abs(this.y - point_get.y) < 1) {
+                game.physics.arcade.moveToXY(this, this.browseTarget.x, this.browseTarget.y, 50);
+                if (Math.abs(this.x - this.browseTarget.x) < 1 && Math.abs(this.y - this.browseTarget.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
-                    setTimeout(function(){me.behaviour_current = me.behaviours.BUY}, 1000);
+					
+					//Randomly choose whether to buy this book or browse for another
+					if (Math.random() > 0.5) {
+						//BUY!
+    					game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
+					} else {
+						//Nah
+    					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE}, this);
+					}
                 }
                 break;
             }
