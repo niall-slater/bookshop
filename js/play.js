@@ -70,7 +70,7 @@ var playState = {
 		layer2.resizeWorld();
 		
 		game.world.bringToTop(groupCharacters);
-		//setInterval(this.spawnCustomer, 2000);
+		setInterval(this.spawnCustomer, 400);
         this.spawnCustomer();
 		
 	},
@@ -128,6 +128,9 @@ class Customer extends Phaser.Sprite {
         };
         this.behaviour_current = this.behaviours.BROWSE;
         
+        this.bobMax = 1;
+        this.bobTimer = 1;
+        
         game.add.existing(this);
         game.physics.arcade.enable(this);
         
@@ -139,11 +142,18 @@ class Customer extends Phaser.Sprite {
         //Add reference to this so we can use it in anonymous functions without problems
         var me = this;
         
+        this.bobTimer -= game.time.physicsElapsed;
+        
+        if (this.bobTimer <= 0)
+        {
+            this.bob();
+            this.bobTimer = this.bobMax;
+        }
+        
         switch (this.behaviour_current) {
             case this.behaviours.BROWSE: {
                 game.physics.arcade.moveToXY(this, point_get.x, point_get.y, 50);
                 if (Math.abs(this.x - point_get.x) < 1 && Math.abs(this.y - point_get.y) < 1) {
-                    console.log("Book located");
                     this.behaviour_current = this.behaviours.IDLE;
                     setTimeout(function(){me.behaviour_current = me.behaviours.BUY}, 1000);
                 }
@@ -152,7 +162,6 @@ class Customer extends Phaser.Sprite {
             case this.behaviours.BUY: {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
-                    console.log("Book purchased");
                     this.behaviour_current = this.behaviours.IDLE;
                     setTimeout(function(){me.behaviour_current = me.behaviours.LEAVE}, 1000);
                 }
@@ -173,8 +182,11 @@ class Customer extends Phaser.Sprite {
         }
     }
     
+    bob() {
+        
+    }
+    
     die() {
-        console.log("Ded");
         this.destroy();
     }
     
