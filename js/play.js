@@ -88,20 +88,7 @@ var playState = {
 		let maxChars = 15; //this is the number of characters in the spritesheet
 		let selector = Math.floor(Math.random() * maxChars);
 		
-		//let customer = game.add.sprite(point_enter.x - 8, point_enter.y - 8, 'sprites_characters');
-		
         let customer = new Customer(game, selector, point_enter.x, point_enter.y);
-        
-        /* Initialising this here feels very wrong. TODO: Find out how to declare variables inside the customer class without an error */
-        customer.behaviours = {
-            BROWSE: 0,
-            BUY: 1,
-            LEAVE: 2
-        };
-        
-        customer.behaviour_current = customer.behaviours.BROWSE;
-        /* */
-        
 		groupCharacters.add(customer);
         
 		
@@ -133,7 +120,14 @@ class Customer extends Phaser.Sprite {
         this.frame = spriteIndex;
         
         this.anchor.setTo(0.5, 0.5);
-
+        
+        this.behaviours = {
+            BROWSE: 0,
+            BUY: 1,
+            LEAVE: 2
+        };
+        this.behaviour_current = this.behaviours.BROWSE;
+        
         game.add.existing(this);
         game.physics.arcade.enable(this);
         
@@ -142,12 +136,16 @@ class Customer extends Phaser.Sprite {
     
     update() {
         
+        //Add reference to this so we can use it in anonymous functions without problems
+        var me = this;
+        
         switch (this.behaviour_current) {
             case this.behaviours.BROWSE: {
                 game.physics.arcade.moveToXY(this, point_get.x, point_get.y, 50);
                 if (Math.abs(this.x - point_get.x) < 1 && Math.abs(this.y - point_get.y) < 1) {
                     console.log("Book located");
-                    this.switchBehaviourBuy();
+                    this.behaviour_current = this.behaviours.IDLE;
+                    setTimeout(function(){me.behaviour_current = me.behaviours.BUY}, 1000);
                 }
                 break;
             }
@@ -155,7 +153,8 @@ class Customer extends Phaser.Sprite {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
                     console.log("Book purchased");
-                    this.switchBehaviourLeave();
+                    this.behaviour_current = this.behaviours.IDLE;
+                    setTimeout(function(){me.behaviour_current = me.behaviours.LEAVE}, 1000);
                 }
                 break;
             }
@@ -167,16 +166,11 @@ class Customer extends Phaser.Sprite {
                 }
                 break;
             }
+            case this.behaviours.IDLE: {
+                this.body.velocity.setTo(0,0);
+                break;
+            }
         }
-        
-    }
-    
-    switchBehaviourBuy() {
-        this.behaviour_current = 1;
-    }
-    
-    switchBehaviourLeave() {
-        this.behaviour_current = 2;
     }
     
     die() {
