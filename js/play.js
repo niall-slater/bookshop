@@ -34,6 +34,9 @@ var spawnTimer = spawnMax;
 
 //UI
 var slickUI;
+var tickerText;
+var cash = 0;
+var cashText;
 
 var playState = {
     
@@ -96,6 +99,25 @@ var playState = {
 
         this.spawnCustomer();
 		
+		
+		//UI stuff
+		
+		var fontStyle = { font: "10px Arial", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
+
+		var bar = game.add.graphics();
+		bar.beginFill(0x000000, 0.4);
+		bar.drawRect(0, 180, 400, 100);
+
+		tickerText = game.add.text(0, 0, "", fontStyle);
+		tickerText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
+
+		tickerText.setTextBounds(2, 140, 330, 80);
+
+		cashText = game.add.text(0, 0, "£" + cash, fontStyle);
+		cashText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
+
+		cashText.setTextBounds(4, 2, 120, 16);
+		
 	},
 	
 	update: function() {
@@ -105,6 +127,7 @@ var playState = {
 	},
 	
 	render: function() {
+		
 		
 	},
 	
@@ -148,6 +171,7 @@ class Customer extends Phaser.Sprite {
         Phaser.Sprite.call(this, game, x, y, 'sprites_characters');
 
         this.frame = spriteIndex;
+		this.name = generateName();
         
         this.anchor.setTo(0.5, 0.5);
         
@@ -203,6 +227,9 @@ class Customer extends Phaser.Sprite {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
+					tickerText.text = this.name + " bought a copy of " + GenerateTitle();
+					cash += 5;
+					cashText.text = "£" + cash;
                     setTimeout(function(){me.behaviour_current = me.behaviours.LEAVE}, 1000);
                 }
                 break;
