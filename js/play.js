@@ -38,6 +38,10 @@ var tickerText;
 var cash = 0;
 var cashText;
 
+var bookCatalogue = [];
+
+/* SLICK COMPONENTS */
+var button_books;
 var panel_ordering;
 
 var playState = {
@@ -96,6 +100,16 @@ var playState = {
 		//At this point I'm hardcoding them but the easiest dynamic way will be to read
 		//directly from the Tiled JSON export. Don't use the Phaser functions for this.
 		
+        //Generate books
+        let numBooks = 10;
+        for (var i = 0; i < numBooks; i++) {
+            let publication = {
+                title: GenerateTitleShort(),
+                author: generateName()
+            };
+            bookCatalogue.push(publication);
+        }
+        
 		game.world.bringToTop(groupCharacters);
 		
 		game.time.events.loop(spawnMax, this.spawnCustomer, this);
@@ -104,32 +118,8 @@ var playState = {
 		
 		
 		//UI stuff
-		
-		var fontStyle = { font: "10px Arial", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
-
-		var bar = game.add.graphics();
-		bar.beginFill(0x000000, 0.4);
-		bar.drawRect(0, 180, 400, 100);
-
-		tickerText = game.add.text(0, 0, "", fontStyle);
-		tickerText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
-
-		tickerText.setTextBounds(2, 140, 330, 80);
-
-		cashText = game.add.text(0, 0, "£" + cash, fontStyle);
-		cashText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
-
-		cashText.setTextBounds(4, 2, 120, 16);
         
-        var button_books;
-        slickUI.add(button_books = new SlickUI.Element.Button(300,0, 60, 20));
-        button_books.events.onInputUp.add(this.openMenuBooks);
-        button_books.add(new SlickUI.Element.Text(0,0, "Books")).center();
-        
-        slickUI.add(panel_ordering = new SlickUI.Element.Panel(50, 50, 260, 120));
-        panel_ordering.add(new SlickUI.Element.Text(0,0, "Books Catalogue"));
-        panel_ordering.visible = false;
-		
+        this.buildUI();
 	},
 	
 	update: function() {
@@ -171,8 +161,50 @@ var playState = {
 		return navPoints_books[Math.floor(Math.random() * navPoints_books.length)];
 	},
     
+    buildUI: function() {
+        
+		var fontStyle = { font: "10px Arial", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
+
+		var bar = game.add.graphics();
+		bar.beginFill(0x000000, 0.4);
+		bar.drawRect(0, 180, 400, 100);
+
+		tickerText = game.add.text(0, 0, "", fontStyle);
+		tickerText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
+
+		tickerText.setTextBounds(2, 140, 330, 80);
+
+		cashText = game.add.text(0, 0, "£" + cash, fontStyle);
+		cashText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
+
+		cashText.setTextBounds(4, 2, 120, 16);
+        
+        slickUI.add(button_books = new SlickUI.Element.Button(300,0, 60, 20));
+        button_books.events.onInputUp.add(this.openMenuBooks);
+        button_books.add(new SlickUI.Element.Text(0,0, "Books")).center();
+        
+        slickUI.add(panel_ordering = new SlickUI.Element.Panel(50, 50, 260, 120));
+        panel_ordering.add(new SlickUI.Element.Text(0,0, "Books Catalogue"));
+        panel_ordering.visible = false;
+        panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(232, 0, 16, 16));
+        panel_ordering.exitButton.events.onInputUp.add(this.closeMenuBooks);
+        panel_ordering.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
+        panel_ordering.carousel = [];
+        for (var i = 0; i < bookCatalogue.length; i++) {
+            let icon;
+            let item = panel_ordering.add(icon = new SlickUI.Element.DisplayObject(4 + (82 * i), 16, game.make.sprite(0,0, 'sprite_book'))).add(new SlickUI.Element.Text(0,32, bookCatalogue[i].title, 16, 'minecraftia', 74, 100));
+            panel_ordering.carousel.push(item);
+            if (i >= 3) {
+                icon.visible = false;
+            }
+        }
+    },
+    
     openMenuBooks: function() {
         panel_ordering.visible = true;
+    },
+    closeMenuBooks: function() {
+        panel_ordering.visible = false;
     }
     
 };

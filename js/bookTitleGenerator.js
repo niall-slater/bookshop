@@ -132,6 +132,40 @@ function GenerateTitle()
     return result;
 }
 
+function GenerateTitleShort()
+{
+    var result = "";
+    
+    var numberOfFormats = 5;
+    var formatSelect = Math.floor(Math.random() * (numberOfFormats));
+    
+    switch(formatSelect) {
+    case 0:
+        result = "How to " + GetWord(verbs_present) + " a " + GetWord(nouns);
+        break;
+    case 1:
+        result = "The " + GetWord(nouns) + " with the " + GetWord(nouns);
+        break;
+    case 2:
+        result = "The " + GetWord(nouns) + " " + GetWord(verbs_present_er) + "er";
+        break;
+    case 3:
+        result = "To " + GetWord(verbs_present) + " a " + GetWord(nouns);
+        break;
+    case 4:
+        result = "The " + GetWord(quests) + " for the " + GetWord(adjectives) + " " + GetWord(nouns);
+        break;
+    case 5:
+        result = "Don't Make Me " + GetWord(verbs_present) + " You";
+        break;
+    default:
+        result = "The Second Death of Daedalus Mole";
+        break;
+    }
+    
+    return result;
+}
+
 function GetWord(wordType)
 {
     var result = "";

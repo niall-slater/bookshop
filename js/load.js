@@ -15,6 +15,9 @@ var loadState = {
 		let maxChars = 17; //this is the number of characters in the spritesheet
         game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, maxChars, 0, 1);
         
+        //UI images
+        game.load.image('sprite_book', 'res/ui/book.png');
+        
 		/* AUDIO */
 		//game.load.audio('music_airshipSerenity', 'res/audio/Airship Serenity.mp3');
 		
