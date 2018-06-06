@@ -29,7 +29,7 @@ var point_buy = {
 	y: 88
 }
 
-var spawnMax = 10000;
+var spawnMax = 1000;
 var spawnTimer = spawnMax;
 
 //UI
@@ -82,20 +82,20 @@ var playState = {
 			{x: 136, y: 56},
 			{x: 168, y: 56},
 			{x: 200, y: 56},
-			{x: 72, y: 72},
-			{x: 72, y: 120},
-			{x: 120, y: 72},
-			{x: 120, y: 120},
-			{x: 184, y: 72},
-			{x: 184, y: 120},
-			{x: 232, y: 120}
+			{x: 88, y: 88},
+			{x: 88, y: 136},
+			{x: 136, y: 88},
+			{x: 136, y: 136},
+			{x: 200, y: 72},
+			{x: 200, y: 136},
+			{x: 248, y: 136}
 		];		
 		//At this point I'm hardcoding them but the easiest dynamic way will be to read
 		//directly from the Tiled JSON export. Don't use the Phaser functions for this.
 		
 		game.world.bringToTop(groupCharacters);
 		
-		game.time.events.loop(Phaser.Timer.SECOND * 4, this.spawnCustomer, this);
+		game.time.events.loop(spawnMax, this.spawnCustomer, this);
 
         this.spawnCustomer();
 		
@@ -122,8 +122,6 @@ var playState = {
 	
 	update: function() {
 		
-		//tick spawn timer
-		spawnTimer -= game.time.physicsElapsed;
 	},
 	
 	render: function() {
