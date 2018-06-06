@@ -44,12 +44,13 @@ var playState = {
 	
 	preload: function() {
         
-		
 		//Slick UI library
 		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
 		slickUI.load('res/ui/kenney/kenney.json');
 		
 		groupCharacters = game.add.group();
+        
+        game.stage.disableVisibilityChange = true;
 	},
 
 	create: function () {
@@ -186,16 +187,10 @@ class Customer extends Phaser.Sprite {
         
         game.add.existing(this);
         game.physics.arcade.enable(this);
-        
-        //game.add.tween(this).to({ x: point_get.x, y: point_get.y}, 3000, Phaser.Easing.Linear.None, true);
     }
     
     update() {
-        
-        //Add reference to this so we can use it in anonymous functions without problems
-        var me = this;
-		//That said, this isn't necessary if using game.time.events.add instead of setTimeout, which you should be.
-        
+
         this.bobTimer -= game.time.physicsElapsed;
         
         if (this.bobTimer <= 0)
@@ -228,7 +223,7 @@ class Customer extends Phaser.Sprite {
 					tickerText.text = this.name + " bought a copy of " + GenerateTitle();
 					cash += 5;
 					cashText.text = "£" + cash;
-                    setTimeout(function(){me.behaviour_current = me.behaviours.LEAVE}, 1000);
+                    game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
                 }
                 break;
             }
