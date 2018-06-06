@@ -189,13 +189,17 @@ var playState = {
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(232, 0, 16, 16));
         panel_ordering.exitButton.events.onInputUp.add(this.closeMenuBooks);
         panel_ordering.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
-        panel_ordering.carousel = [];
+        
+        panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 16, game.make.sprite(0,0, ''), 258, 118));
+        
+        panel_ordering.carouselList = []; //this is part of the bit down there that doesn't work
+        
         for (var i = 0; i < bookCatalogue.length; i++) {
             let icon;
-            let item = panel_ordering.add(icon = new SlickUI.Element.DisplayObject(4 + (82 * i), 16, game.make.sprite(0,0, 'sprite_book'))).add(new SlickUI.Element.Text(0,32, bookCatalogue[i].title, 16, 'minecraftia', 74, 100));
-            panel_ordering.carousel.push(item);
+            let item = panel_ordering.carousel.add(icon = new SlickUI.Element.DisplayObject(4 + (82 * i), 16, game.make.sprite(0,0, 'sprite_book'))).add(new SlickUI.Element.Text(0,32, bookCatalogue[i].title, 16, 'minecraftia', 74, 100));
+            panel_ordering.carouselList.push(item);
             if (i >= 3) {
-                icon.visible = false;
+                //icon.visible = false;
             }
         }
         panel_ordering.add(panel_ordering.nextButton = new SlickUI.Element.Button(232, 85, 16, 16));
@@ -210,7 +214,17 @@ var playState = {
         panel_ordering.visible = false;
     },
     nextBook: function() {
+        panel_ordering.carousel.x -= 16;
         
+        //This doesn't work
+        for (var i = 0; i < bookCatalogue.length; i++) {
+            let item = panel_ordering.carouselList[i];
+            if (item.x < 1 || item.x > 100) {
+                item.visible = false;
+            } else {
+                item.visible = true;
+            }
+        }
     }
     
 };
