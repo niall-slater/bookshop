@@ -1,5 +1,5 @@
 <font>
-    <info face="minecraftia" size="64" bold="0" italic="0" chasrset="" unicode="0" stretchH="100" smooth="0" aa="0" padding="0,0,0,0" spacing="2,2"/>
+    <info face="minecraftia" size="128" bold="0" italic="0" chasrset="" unicode="0" stretchH="100" smooth="0" aa="0" padding="0,0,0,0" spacing="2,2"/>
     <common lineHeight="96" base="80" scaleW="512" scaleH="512" pages="1" packed="0"/>
     <pages>		
         <page id="0" file="minecraftia-black.png"/>

@@ -38,6 +38,8 @@ var tickerText;
 var cash = 0;
 var cashText;
 
+var panel_ordering;
+
 var playState = {
     
     //State Information
@@ -118,6 +120,15 @@ var playState = {
 		cashText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
 
 		cashText.setTextBounds(4, 2, 120, 16);
+        
+        var button_books;
+        slickUI.add(button_books = new SlickUI.Element.Button(300,0, 60, 20));
+        button_books.events.onInputUp.add(this.openMenuBooks);
+        button_books.add(new SlickUI.Element.Text(0,0, "Books")).center();
+        
+        slickUI.add(panel_ordering = new SlickUI.Element.Panel(50, 50, 260, 120));
+        panel_ordering.add(new SlickUI.Element.Text(0,0, "Books Catalogue"));
+        panel_ordering.visible = false;
 		
 	},
 	
@@ -158,8 +169,12 @@ var playState = {
 
 	getRandomNavPointBooks: function() {
 		return navPoints_books[Math.floor(Math.random() * navPoints_books.length)];
-	}
-	
+	},
+    
+    openMenuBooks: function() {
+        panel_ordering.visible = true;
+    }
+    
 };
 
 class Customer extends Phaser.Sprite {
