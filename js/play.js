@@ -198,6 +198,9 @@ var playState = {
                 icon.visible = false;
             }
         }
+        panel_ordering.add(panel_ordering.nextButton = new SlickUI.Element.Button(232, 85, 16, 16));
+        panel_ordering.nextButton.events.onInputUp.add(this.nextBook);
+        panel_ordering.nextButton.add(new SlickUI.Element.Text(0,0,'>')).center();
     },
     
     openMenuBooks: function() {
@@ -205,6 +208,9 @@ var playState = {
     },
     closeMenuBooks: function() {
         panel_ordering.visible = false;
+    },
+    nextBook: function() {
+        
     }
     
 };
