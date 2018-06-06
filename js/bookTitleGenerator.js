@@ -136,7 +136,7 @@ function GenerateTitleShort()
 {
     var result = "";
     
-    var numberOfFormats = 5;
+    var numberOfFormats = 7;
     var formatSelect = Math.floor(Math.random() * (numberOfFormats));
     
     switch(formatSelect) {
@@ -150,13 +150,16 @@ function GenerateTitleShort()
         result = "The " + GetWord(nouns) + " " + GetWord(verbs_present_er) + "er";
         break;
     case 3:
-        result = "To " + GetWord(verbs_present) + " a " + GetWord(nouns);
+        result = "My " + GetWord(nouns_proper);
         break;
     case 4:
-        result = "The " + GetWord(quests) + " for the " + GetWord(adjectives) + " " + GetWord(nouns);
+        result = "The " + GetWord(nationalities) + " " + GetWord(quests);
         break;
     case 5:
         result = "Don't Make Me " + GetWord(verbs_present) + " You";
+        break;
+    case 6:
+        result = "The Big Book of " + GetWord(nouns_plural);
         break;
     default:
         result = "The Second Death of Daedalus Mole";
