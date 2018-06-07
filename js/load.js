@@ -16,7 +16,11 @@ var loadState = {
         game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, maxChars, 0, 1);
         
         //UI images
-        game.load.image('sprite_book', 'res/ui/book.png');
+        game.load.image('sheet_books', 'res/ui/sheet_books.png', 16, 16, 12, 0, 0);
+		
+		for (var i = 0; i < 12; i++) {
+        	game.load.image('sprite_book' + i, 'res/ui/sprite_book' + i + '.png', 16, 16, 12, 0, 0);
+		}
         
 		/* AUDIO */
 		//game.load.audio('music_airshipSerenity', 'res/audio/Airship Serenity.mp3');

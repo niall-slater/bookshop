@@ -184,7 +184,7 @@ var playState = {
         button_books.add(new SlickUI.Element.Text(0,0, "Books")).center();
         
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 120));
-        panel_ordering.add(new SlickUI.Element.Text(0,0, "Books Catalogue"));
+        panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue"));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
         panel_ordering.exitButton.events.onInputUp.add(this.closeMenuBooks);
@@ -196,9 +196,12 @@ var playState = {
             let slab;
             let icon;
             let text;
-            panel_ordering.carousel.add(slab = new SlickUI.Element.Button(4 + (64 * i) + 4*i, 16, 64, 80));
-            slab.add(icon = new SlickUI.Element.DisplayObject(0, 0, game.make.sprite(0,0, 'sprite_book')));
-            slab.add(text = new SlickUI.Element.Text(0,26, bookCatalogue[i].title, 16, 'minecraftia', 60));
+			let spriteIndex = Math.floor(Math.random()*12);
+			let sprite = game.make.sprite(0,0, 'sprite_book' + spriteIndex);
+            panel_ordering.carousel.add(slab = new SlickUI.Element.Button(6 + (80 * i), 16, 70, 80));
+            slab.add(icon = new SlickUI.Element.DisplayObject(16, 2, sprite));
+            slab.add(text = new SlickUI.Element.Text(2,24, bookCatalogue[i].title, 16, 'minecraftia', 60, 80));
+			slab.events.onInputUp.add(this.orderBook);
         }
     },
     
@@ -209,14 +212,9 @@ var playState = {
         panel_ordering.visible = false;
         panel_ordering.carousel.x = 0;
     },
-    prevBook: function() {
-        panel_ordering.carousel.x += 32;
-    }
-    ,
-    nextBook: function() {
-        panel_ordering.carousel.x -= 32;
-    }
-    
+	orderBook: function() {
+		console.log(bookCatalogue[0]);
+	}
 };
 
 class Customer extends Phaser.Sprite {
