@@ -48,6 +48,18 @@ var button_view;
 var panel_ordering;
 var panel_stock;
 
+var currentInterests = {
+	technology: 0,
+	politics: 0,
+	space: 0,
+	nature: 0,
+	business: 0,
+	mindfulness: 0,
+	history: 0,
+	music: 0,
+	gaming: 0
+};
+
 var playState = {
     
     //State Information
@@ -128,8 +140,19 @@ var playState = {
 		newsTimer -= game.time.physicsElapsed;
 		
 		if (newsTimer <= 0) {
-			tickerText.text = GenerateRandomNewsStory();
-			newsTimer = 4;
+			let newsStory = GenerateRandomNewsStory();
+			tickerText.text = newsStory.text;
+			newsTimer = 3;
+			//TODO: on this line we need to look up the relevant interest in currentInterests and change its value. We look it up using newsStory.tag. There's a simple javascript way to do this but i don't know it and i want some gin so this is a problem for future nige
+			console.log(currentInterests);
+		}
+		
+		for (var [key, value] of Object.entries(currentInterests)) {
+			if (value > 0) {
+				value -= game.time.physicsElapsed;
+			} else {
+				value = 0;
+			}
 		}
 		
 	},
