@@ -1,6 +1,6 @@
 var nouns = ["brexit", "bastard", "prophecy", "countryside", "sword", "book", "thief", "puppet", "miniaturist", "girl", "son", "mother", "daughter", "colleague", "politician", "queen", "treasure", "boy", "pencil", "warehouse", "ham shank", "battle", "wizard school", "obelisk", "potion", "carpet", "violet", "rose", "marble", "referendum", "party", "beer", "vodka shot", "cigarette", "motorbike", "spellbook", "life", "death", "romance", "affair", "bird", "crow", "escort", "artist", "word", "creature", "lizard", "blogger", "blog", "professor", "murder", "gamergater", "gate", "promise", "gun", "nazi"];
-var nouns_plural = ["prophecies", "bastards", "country houses", "swords", "books", "thieves", "puppets", "miniaturists", "girls", "sons", "mothers", "daughters", "colleagues", "politicians", "queens", "treasures", "teenage boys", "pencils", "warehouses", "ham shanks", "battle", "wizard schools", "obelisks", "potions", "carpets", "flowers", "lilies", "marbles", "elections", "parties", "beers", "vodka shots", "cigarettes", "motorbikes", "murders", "spellbooks", "lives", "deaths", "romances", "affairs", "members of parliament", "words", "birds", "ravens", "vampires", "werewolves", "dinosaurs", "creatures", "bloggers", "blogs", "promises", "guns", "plumbers", "white nationalists"];
-var nouns_proper = ["brexit", "life", "death", "love", "betrayal", "pain", "suffering", "democracy", "fascism", "art", "vulgarity", "sex", "anger", "frustration", "meaning", "wine", "cake", "rosemary", "gamergate", "racism", "sexism"];
+var nouns_plural = ["prophecies", "bastards", "country houses", "swords", "books", "thieves", "puppets", "miniaturists", "girls", "sons", "mothers", "daughters", "colleagues", "politicians", "queens", "treasures", "teenage boys", "pencils", "warehouses", "ham shanks", "battle", "wizard schools", "obelisks", "potions", "carpets", "flowers", "lilies", "marbles", "elections", "parties", "beers", "vodka shots", "cigarettes", "motorbikes", "murders", "spellbooks", "lives", "deaths", "romances", "affairs", "members of parliament", "words", "birds", "ravens", "vampires", "werewolves", "dinosaurs", "creatures", "bloggers", "blogs", "promises", "guns", "plumbers", "video games"];
+var nouns_proper = ["brexit", "life", "death", "love", "betrayal", "pain", "calm", "chaos", "suffering", "democracy", "fascism", "art", "vulgarity", "sex", "anger", "frustration", "meaning", "wine", "cake", "rosemary", "gamergate", "racism", "sexism"];
 var adjectives = ["cold", "aggressive", "ugly", "poorly-conceived", "unplanned", "racist", "expensive", "cheap", "slutty", "prudent", "unwise", "tasty", "difficult", "angry", "unpredictable", "second", "first", "regrettable", "magical", "enchanted", "beautiful", "left-wing", "right-wing", "centrist", "politically-expedient", "scientifically-proven", "dubious", "disastrous", "final", "sexually exciting", "sad", "unpublishable", "artful", "rough",];
 var quests = ["quest", "journey", "trek", "escapade", "road trip", "mission", "suicide mission"];
 var verbs_present = ["kill", "brexit", "kiss", "arraign", "march", "serve", "hit", "shake", "walk", "escort", "fight", "sort out", "ruin", "destroy", "repair", "give birth to", "celebrate", "commemorate", "remember", "forget", "drive", "smoke", "regret", "seduce", "frighten", "cuddle", "follow", "marry", "murder", "annex", "backpack"];
@@ -10,7 +10,7 @@ var verbs_present_ing_with = ["invading France", "programming Twitter bots", "ma
 var times = ["nanosecond", "second", "minute", "hour", "day", "days", "week", "fortnight", "year", "years", "decade", "lifetime", "bender", "spree", "rampage", "lunchtime", "breakfast", "midnight snack", "interstellar journey", "regrettable period"];
 var nationalities = ["Irish", "Romanian", "German", "French", "Scottish", "English", "British", "Welsh", "Polish", "Russian", "Hungarian", "Canadian", "North American", "Australian", "Alien", "Foreign"];
 var groups = ["army", "football team", "navy", "game development studio", "team of journalists", "accounts department", "brexit negotiation team", "publishing industry", "parks department", "bake-off", "government", "underground crab army", "WhatsApp group", "far-right", "far-left", "special forces", "film industry", "high street bakery"];
-var celebs = ["Theresa May", "Dwayne 'The Rock' Johnson", "Chris Evans", "Janelle Monáe", "Mara Wilson", "Thatcher's Ghost", "Neil Gaiman", "Kim Kardashian", "Daedalus Mole", "Taika Waititi", "Your Dad", "Jonathan Franzen", "Arin Hanson", "Some Guy", "Jeremy Corbyn", "Chris Hemsworth", "Alan Sugar", "Donald Trump", "Barack Obama", "Elon Musk", "Your Mate Adam", "A Racist YouTuber", "The Flappy Bird Guy"];
+var celebs = ["Theresa May", "Dwayne 'The Rock' Johnson", "Chris Evans", "Janelle Monáe", "Mara Wilson", "Thatcher's Ghost", "Neil Gaiman", "Kim Kardashian", "Daedalus Mole", "Taika Waititi", "Your Dad", "Jonathan Franzen", "Arin Hanson", "Some Guy", "Jeremy Corbyn", "Chris Hemsworth", "Alan Sugar", "Barack Obama", "Elon Musk", "Your Mate Adam", "A Racist YouTuber", "The Flappy Bird Guy"];
 var forenames = ["Barry", "Keith", "Susan", "Patricia", "Nigel", "Poppy", "Ellen", "Eleanor", "Samia", "Brad", "Joe", "Riz", "Gunther", "Hans"];
 var surnames = ["Ahmed", "Trotter", "Harding", "Cornwell", "Smith", "Shaw", "Blount", "Shah", "Rosen", "Choudhury", "Tang", "Glau", "Blitz"];
 var problems = ["Conundrum", "Case", "Affair", "Problem", "Wanking", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder"];
@@ -136,15 +136,15 @@ function GenerateTitleShort()
 {
     var result = "";
     
-    var numberOfFormats = 7;
+    var numberOfFormats = 9;
     var formatSelect = Math.floor(Math.random() * (numberOfFormats));
     
     switch(formatSelect) {
     case 0:
-        result = "How to " + GetWord(verbs_present) + " a " + GetWord(nouns);
+        result = "How to " + GetWord(verbs_present) + " " + GetWord(nouns_plural);
         break;
     case 1:
-        result = "The " + GetWord(nouns) + " with the " + GetWord(nouns);
+        result = "The " + GetWord(nouns) + " and the " + GetWord(nouns);
         break;
     case 2:
         result = "The " + GetWord(nouns) + " " + GetWord(verbs_present_er) + "er";
@@ -160,6 +160,12 @@ function GenerateTitleShort()
         break;
     case 6:
         result = "The Big Book of " + GetWord(nouns_plural);
+        break;
+    case 7:
+        result = "The Little Book of " + GetWord(nouns_proper);
+        break;
+    case 8:
+        result = "The Book of " + GetWord(verbs_present_ing);
         break;
     default:
         result = "The Second Death of Daedalus Mole";

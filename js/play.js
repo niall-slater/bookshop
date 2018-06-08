@@ -35,10 +35,11 @@ var spawnTimer = spawnMax;
 //UI
 var slickUI;
 var tickerText;
-var cash = 0;
+var cash = 50;
 var cashText;
 
 var bookCatalogue = [];
+var bookStock = [];
 
 /* SLICK COMPONENTS */
 var button_books;
@@ -103,11 +104,7 @@ var playState = {
         //Generate books
         let numBooks = 4;
         for (var i = 0; i < numBooks; i++) {
-            let publication = {
-                title: GenerateTitleShort(),
-                author: generateName()
-            };
-            bookCatalogue.push(publication);
+			bookCatalogue.push(this.generateBook());
         }
         
 		game.world.bringToTop(groupCharacters);
@@ -191,29 +188,57 @@ var playState = {
         panel_ordering.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
         
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
-        
+		
+		this.buildCatalogue();
+    },
+	
+	buildCatalogue: function() {
         for (var i = 0; i < bookCatalogue.length; i++) {
             let slab;
             let icon;
             let text;
-			let spriteIndex = Math.floor(Math.random()*12);
-			let sprite = game.make.sprite(0,0, 'sprite_book' + spriteIndex);
+			let sprite = game.make.sprite(0,0, 'sprite_book' + bookCatalogue[i].spriteIndex);
             panel_ordering.carousel.add(slab = new SlickUI.Element.Button(6 + (80 * i), 16, 70, 80));
             slab.add(icon = new SlickUI.Element.DisplayObject(16, 2, sprite));
             slab.add(text = new SlickUI.Element.Text(2,24, bookCatalogue[i].title, 16, 'minecraftia', 60, 80));
-			slab.events.onInputUp.add(this.orderBook);
+            slab.add(text = new SlickUI.Element.Text(2, 60, bookCatalogue[i].cost + " GBP", 16, 'minecraftia', 60, 80));
+			slab.events.onInputUp.add(this.orderBook.bind(this, i));
         }
-    },
+	},
     
+	generateBook: function() {
+		let book = {
+			title: GenerateTitleShort(),
+			author: generateName(),
+			cost: this.generateCost(),
+			spriteIndex: Math.floor(Math.random()*12)
+		};
+		return book;
+	},
+	
     openMenuBooks: function() {
-        panel_ordering.visible = true;
+        panel_ordering.visible = !panel_ordering.visible;
     },
     closeMenuBooks: function() {
         panel_ordering.visible = false;
         panel_ordering.carousel.x = 0;
     },
-	orderBook: function() {
-		console.log(bookCatalogue[0]);
+	
+	orderBook: function(i) {
+		if (bookCatalogue[i].cost > cash) {
+			return;
+		}
+		cash -= bookCatalogue[i].cost;
+		bookStock.push(bookCatalogue[i])
+		console.log(bookStock);
+		cashText.text = "£" + cash;
+		bookCatalogue[i] = this.generateBook();
+		this.buildCatalogue();
+	},
+	
+	generateCost: function() {
+		let result = Math.floor(Math.random() * 20) + 4;
+		return result;
 	}
 };
 
