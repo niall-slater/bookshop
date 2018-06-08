@@ -42,8 +42,10 @@ var bookCatalogue = [];
 var bookStock = [];
 
 /* SLICK COMPONENTS */
-var button_books;
+var button_buy;
+var button_view;
 var panel_ordering;
+var panel_stock;
 
 var playState = {
     
@@ -176,20 +178,31 @@ var playState = {
 
 		cashText.setTextBounds(4, 2, 120, 16);
         
-        slickUI.add(button_books = new SlickUI.Element.Button(300,0, 60, 20));
-        button_books.events.onInputUp.add(this.openMenuBooks);
-        button_books.add(new SlickUI.Element.Text(0,0, "Books")).center();
+        slickUI.add(button_buy = new SlickUI.Element.Button(280, 0, 80, 20));
+        button_buy.events.onInputUp.add(this.openMenuCatalogue);
+        button_buy.add(new SlickUI.Element.Text(6,0, "Buy stock"));
+        slickUI.add(button_view = new SlickUI.Element.Button(280, 22, 80, 20));
+        button_view.events.onInputUp.add(this.openMenuStock);
+        button_view.add(new SlickUI.Element.Text(6,0, "View stock"));
         
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 120));
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue"));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
-        panel_ordering.exitButton.events.onInputUp.add(this.closeMenuBooks);
+        panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
         panel_ordering.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
         
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
 		
 		this.buildCatalogue();
+		
+        slickUI.add(panel_stock = new SlickUI.Element.Panel(8, 50, 336, 120));
+        panel_stock.add(new SlickUI.Element.Text(10,0, "Current Stock"));
+        panel_stock.visible = false;
+        panel_stock.add(panel_stock.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
+        panel_stock.exitButton.events.onInputUp.add(this.closeMenuStock);
+        panel_stock.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
+		
     },
 	
 	buildCatalogue: function() {
@@ -216,12 +229,21 @@ var playState = {
 		return book;
 	},
 	
-    openMenuBooks: function() {
+    openMenuCatalogue: function() {
+        panel_stock.visible = false;
         panel_ordering.visible = !panel_ordering.visible;
     },
-    closeMenuBooks: function() {
+    closeMenuCatalogue: function() {
         panel_ordering.visible = false;
         panel_ordering.carousel.x = 0;
+    },
+    openMenuStock: function() {
+        panel_ordering.visible = false;
+        panel_ordering.carousel.x = 0;
+        panel_stock.visible = !panel_stock.visible;
+    },
+    closeMenuStock: function() {
+        panel_stock.visible = false;
     },
 	
 	orderBook: function(i) {
