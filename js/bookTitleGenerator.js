@@ -1,19 +1,19 @@
-var nouns = ["brexit", "bastard", "prophecy", "countryside", "sword", "book", "thief", "puppet", "miniaturist", "girl", "son", "mother", "daughter", "colleague", "politician", "queen", "treasure", "boy", "pencil", "warehouse", "ham shank", "battle", "wizard school", "obelisk", "potion", "carpet", "violet", "rose", "marble", "referendum", "party", "beer", "vodka shot", "cigarette", "motorbike", "spellbook", "life", "death", "romance", "affair", "bird", "crow", "escort", "artist", "word", "creature", "lizard", "blogger", "blog", "professor", "murder", "gamergater", "gate", "promise", "gun", "nazi"];
+var nouns = ["brexit", "bastard", "prophecy", "countryside", "sword", "book", "thief", "puppet", "miniaturist", "girl", "son", "mother", "daughter", "colleague", "politician", "queen", "treasure", "boy", "pencil", "warehouse", "ham shank", "battle", "wizard school", "obelisk", "potion", "carpet", "violet", "rose", "marble", "referendum", "party", "beer", "vodka shot", "cigarette", "motorbike", "spellbook", "life", "death", "romance", "affair", "bird", "crow", "escort", "artist", "word", "creature", "lizard", "blogger", "blog", "professor", "murder", "gamergater", "gate", "promise", "gun", "tongue"];
 var nouns_plural = ["prophecies", "bastards", "country houses", "swords", "books", "thieves", "puppets", "miniaturists", "girls", "sons", "mothers", "daughters", "colleagues", "politicians", "queens", "treasures", "teenage boys", "pencils", "warehouses", "ham shanks", "battle", "wizard schools", "obelisks", "potions", "carpets", "flowers", "lilies", "marbles", "elections", "parties", "beers", "vodka shots", "cigarettes", "motorbikes", "murders", "spellbooks", "lives", "deaths", "romances", "affairs", "members of parliament", "words", "birds", "ravens", "vampires", "werewolves", "dinosaurs", "creatures", "bloggers", "blogs", "promises", "guns", "plumbers", "video games"];
-var nouns_proper = ["brexit", "life", "death", "love", "betrayal", "pain", "calm", "chaos", "suffering", "democracy", "fascism", "art", "vulgarity", "sex", "anger", "frustration", "meaning", "wine", "cake", "rosemary", "gamergate", "racism", "sexism"];
+var nouns_proper = ["brexit", "life", "death", "love", "betrayal", "pain", "calm", "chaos", "suffering", "democracy", "art", "vulgarity", "sex", "anger", "frustration", "meaning", "wine", "cake", "rosemary", "gamergate", "racism", "sexism"];
 var adjectives = ["cold", "aggressive", "ugly", "poorly-conceived", "unplanned", "racist", "expensive", "cheap", "slutty", "prudent", "unwise", "tasty", "difficult", "angry", "unpredictable", "second", "first", "regrettable", "magical", "enchanted", "beautiful", "left-wing", "right-wing", "centrist", "politically-expedient", "scientifically-proven", "dubious", "disastrous", "final", "sexually exciting", "sad", "unpublishable", "artful", "rough",];
-var quests = ["quest", "journey", "trek", "escapade", "road trip", "mission", "suicide mission"];
-var verbs_present = ["kill", "brexit", "kiss", "arraign", "march", "serve", "hit", "shake", "walk", "escort", "fight", "sort out", "ruin", "destroy", "repair", "give birth to", "celebrate", "commemorate", "remember", "forget", "drive", "smoke", "regret", "seduce", "frighten", "cuddle", "follow", "marry", "murder", "annex", "backpack"];
+var quests = ["quest", "journey", "trek", "escapade", "road trip", "mission", "suicide mission", "caper"];
+var verbs_present = ["kill", "brexit", "kiss", "arraign", "march", "serve", "hit", "shake", "walk", "escort", "fight", "sort out", "ruin", "destroy", "repair", "birth", "celebrate", "commemorate", "remember", "forget", "drive", "smoke", "regret", "seduce", "frighten", "cuddle", "follow", "marry", "murder", "annex", "ship"];
 var verbs_present_er = ["kill", "brexit", "kiss", "arraign", "march", "serv", "spank", "shak", "walk", "escort", "fight", "ruin", "destroy", "fix", "truth", "stalk", "hold", "record", "forgett", "driv", "smok", "regrett", "seduc", "frighten", "cuddl", "follow", "murder"];
-var verbs_present_ing = ["killing", "brexiting", "kissing", "arraigning", "serving", "hitting", "shaking", "walking", "fighting", "planning", "destroying", "giving birth to", "partying", "drinking", "remembering", "forgetting", "journeying", "seducing", "painting", "tinder matching", "gardening", "baking"];
-var verbs_present_ing_with = ["invading France", "programming Twitter bots", "making games", "attending seminars", "posting online", "rage-blogging", "getting back at the ex", "voting in referendums", "tanking economies", "making websites", "writing novels", "backpacking across Europe", "foundation repair"];
+var verbs_present_ing = ["killing", "brexiting", "kissing", "arraigning", "serving", "hitting", "shaking", "walking", "fighting", "planning", "destroying", "birthing", "partying", "drinking", "remembering", "forgetting", "journeying", "seducing", "painting", "tinder matching", "gardening", "baking"];
+var verbs_present_ing_with = ["invading France", "programming Twitter bots", "making games", "attending seminars", "posting online", "rage-blogging", "getting back at the ex", "voting in referendums", "tanking economies", "making websites", "writing novels", "backpacking across Europe", "foundation repair", "shipping"];
 var times = ["nanosecond", "second", "minute", "hour", "day", "days", "week", "fortnight", "year", "years", "decade", "lifetime", "bender", "spree", "rampage", "lunchtime", "breakfast", "midnight snack", "interstellar journey", "regrettable period"];
 var nationalities = ["Irish", "Romanian", "German", "French", "Scottish", "English", "British", "Welsh", "Polish", "Russian", "Hungarian", "Canadian", "North American", "Australian", "Alien", "Foreign"];
 var groups = ["army", "football team", "navy", "game development studio", "team of journalists", "accounts department", "brexit negotiation team", "publishing industry", "parks department", "bake-off", "government", "underground crab army", "WhatsApp group", "far-right", "far-left", "special forces", "film industry", "high street bakery"];
 var celebs = ["Theresa May", "Dwayne 'The Rock' Johnson", "Chris Evans", "Janelle Monáe", "Mara Wilson", "Thatcher's Ghost", "Neil Gaiman", "Kim Kardashian", "Daedalus Mole", "Taika Waititi", "Your Dad", "Jonathan Franzen", "Arin Hanson", "Some Guy", "Jeremy Corbyn", "Chris Hemsworth", "Alan Sugar", "Barack Obama", "Elon Musk", "Your Mate Adam", "A Racist YouTuber", "The Flappy Bird Guy"];
-var forenames = ["Barry", "Keith", "Susan", "Patricia", "Nigel", "Poppy", "Ellen", "Eleanor", "Samia", "Brad", "Joe", "Riz", "Gunther", "Hans"];
-var surnames = ["Ahmed", "Trotter", "Harding", "Cornwell", "Smith", "Shaw", "Blount", "Shah", "Rosen", "Choudhury", "Tang", "Glau", "Blitz"];
-var problems = ["Conundrum", "Case", "Affair", "Problem", "Wanking", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder"];
+var forenames = ["Barry", "Keith", "Susan", "Patricia", "Nigel", "Poppy", "Ellen", "Eleanor", "Samia", "Brad", "Joe", "Riz", "Gunther", "Hans", "Jolene"];
+var surnames = ["Ahmed", "Trotter", "Harding", "Cornwell", "Smith", "Shaw", "Blount", "Shah", "Rosen", "Choudhury", "Tang", "Glau", "Blitz", "McCrum"];
+var problems = ["Conundrum", "Case", "Affair", "Problem", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder", "Throwdown"];
 
 
 function GenerateTitle()
@@ -136,7 +136,7 @@ function GenerateTitleShort()
 {
     var result = "";
     
-    var numberOfFormats = 9;
+    var numberOfFormats = 11;
     var formatSelect = Math.floor(Math.random() * (numberOfFormats));
     
     switch(formatSelect) {
@@ -166,6 +166,12 @@ function GenerateTitleShort()
         break;
     case 8:
         result = "The Book of " + GetWord(verbs_present_ing);
+        break;
+    case 9:
+        result = GetWord(nouns_plural) + " and " + GetWord(nouns_plural);
+        break;
+    case 10:
+        result = "The Men Who " + GetWord(verbs_present) + " " + GetWord(nouns_plural);
         break;
     default:
         result = "The Second Death of Daedalus Mole";

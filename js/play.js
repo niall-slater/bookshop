@@ -38,6 +38,7 @@ var tickerText;
 var cash = 50;
 var cashText;
 
+var newsTimer;
 var bookCatalogue = [];
 var bookStock = [];
 
@@ -119,9 +120,17 @@ var playState = {
 		//UI stuff
         
         this.buildUI();
+		newsTimer = 1;
 	},
 	
 	update: function() {
+		
+		newsTimer -= game.time.physicsElapsed;
+		
+		if (newsTimer <= 0) {
+			tickerText.text = GenerateRandomNewsStory();
+			newsTimer = 4;
+		}
 		
 	},
 	
@@ -322,7 +331,7 @@ class Customer extends Phaser.Sprite {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
-					tickerText.text = this.name + " bought a copy of " + GenerateTitle();
+					//tickerText.text = this.name + " bought a copy of " + GenerateTitle();
 					cash += 5;
 					cashText.text = "£" + cash;
                     game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
