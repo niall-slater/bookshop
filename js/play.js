@@ -1,9 +1,8 @@
 /* GLOBALS */
 
 /*
-TODO:	high interest levels should increase the frequency of
-		spawns as well as the likelihood of buying a book with
-		a matching tag
+TODO:	high interest levels should increase the likelihood of
+		buying a book with a matching tag
 TODO:	players should be able to specify the number of copies 			they're buying
 TODO:	the stock menu should scroll in some way
 TODO:	there should be an option to return books that haven't
@@ -41,7 +40,7 @@ var point_buy = {
 	y: 88
 }
 
-var spawnMax = 10000;
+var spawnMax = 10;
 var spawnTimer = spawnMax;
 
 //UI
@@ -139,11 +138,9 @@ var playState = {
         }
         
 		game.world.bringToTop(groupCharacters);
-		
-		game.time.events.loop(spawnMax, this.spawnCustomer, this);
 
         this.spawnCustomer();
-		
+		spawnTimer = spawnMax;
 		
 		//UI stuff
         
@@ -153,22 +150,37 @@ var playState = {
 	
 	update: function() {
 		
+		//The timer that triggers news events
 		newsTimer -= game.time.physicsElapsed;
-		
 		if (newsTimer <= 0) {
 			let newsStory = GenerateRandomNewsStory();
 			tickerText.text = newsStory.text;
-			newsTimer = 3;
-			currentInterests[newsStory.tag] += Math.floor(Math.random()*5) + 5;
+			newsTimer = 10;
+			currentInterests[newsStory.tag] = Math.floor(Math.random()*15) + 5;
 		}
+		
+		
+		//Keep track of how much interest there is in books
+		let totalInterest = 0;
 		
 		for (var i = 0; i < tags.length; i++) {
 			if (currentInterests[tags[i]] > 0) {
-				currentInterests[tags[i]] -= game.time.physicsElapsed;
+				totalInterest += currentInterests[tags[i]];
+				currentInterests[tags[i]] -= game.time.physicsElapsed/5;
 			} else {
 				currentInterests[tags[i]] = 0;
 			}
 		}
+		
+		//Change spawn frequency based on total interest
+		spawnTimer -= game.time.physicsElapsed;
+		
+		if (spawnTimer <= 0) {
+			this.spawnCustomer();
+			spawnTimer = spawnMax - totalInterest * 0.25;
+			if (spawnTimer <= 0)
+				spawnTimer = 1;
+		}		
 		
 	},
 	
