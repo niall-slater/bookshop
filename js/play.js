@@ -1,5 +1,17 @@
 /* GLOBALS */
 
+/*
+TODO:	high interest levels should increase the frequency of
+		spawns as well as the likelihood of buying a book with
+		a matching tag
+TODO:	players should be able to specify the number of copies 			they're buying
+TODO:	the stock menu should scroll in some way
+TODO:	there should be an option to return books that haven't
+		sold at a penalty
+TODO:	add more funny book title possibilities
+TODO:	add events you have to deal with like author complaints
+*/
+
 //Groups
 var groupBackground;
 var groupCharacters;
@@ -229,14 +241,14 @@ var playState = {
 		
 		this.buildCatalogue();
 		
-        slickUI.add(panel_stock = new SlickUI.Element.Panel(8, 50, 336, 120));
+        slickUI.add(panel_stock = new SlickUI.Element.Panel(8, 50, 336, 160));
         panel_stock.add(new SlickUI.Element.Text(10,0, "Current Stock", 10, styleDark));
         panel_stock.visible = false;
         panel_stock.add(panel_stock.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_stock.exitButton.events.onInputUp.add(this.closeMenuStock);
         panel_stock.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
         
-        panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
+        panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 160));
 		
 		this.buildStock();
 		
@@ -264,11 +276,11 @@ var playState = {
             let title;
             let remainder;
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookStock[i].spriteIndex);
-            panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * i), 240, 30));
+            panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * i), 280, 30));
 			slab.add(icon = new SlickUI.Element.DisplayObject(0, 2, sprite));
             slab.add(title = new SlickUI.Element.Text(18,2, bookStock[i].title, 9, styleDark, 180, 30));
 			title.text.lineSpacing = -8;
-            slab.add(remainder = new SlickUI.Element.Text(172, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
+            slab.add(remainder = new SlickUI.Element.Text(190, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
         }
 	},
     
