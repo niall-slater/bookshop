@@ -49,15 +49,15 @@ var panel_ordering;
 var panel_stock;
 
 var currentInterests = {
-	technology: 0,
-	politics: 0,
-	space: 0,
-	nature: 0,
-	business: 0,
-	mindfulness: 0,
-	history: 0,
-	music: 0,
-	gaming: 0
+	'technology': 0,
+	'politics': 0,
+	'space': 0,
+	'nature': 0,
+	'business': 0,
+	'mindfulness': 0,
+	'history': 0,
+	'music': 0,
+	'gaming': 0
 };
 
 var playState = {
@@ -113,7 +113,7 @@ var playState = {
 			{x: 200, y: 136},
 			{x: 248, y: 136}
 		];		
-		//At this point I'm hardcoding them but the easiest dynamic way will be to read
+		//At this point I'm hardcoding them but the easiest dynamic way (if needed) would be to read
 		//directly from the Tiled JSON export. Don't use the Phaser functions for this.
 		
         //Generate books
@@ -140,18 +140,18 @@ var playState = {
 		newsTimer -= game.time.physicsElapsed;
 		
 		if (newsTimer <= 0) {
+			console.log("News time");
 			let newsStory = GenerateRandomNewsStory();
 			tickerText.text = newsStory.text;
 			newsTimer = 3;
-			//TODO: on this line we need to look up the relevant interest in currentInterests and change its value. We look it up using newsStory.tag. There's a simple javascript way to do this but i don't know it and i want some gin so this is a problem for future nige
-			console.log(currentInterests);
+			currentInterests[newsStory.tag] += Math.floor(Math.random()*5) + 5;
 		}
 		
-		for (var [key, value] of Object.entries(currentInterests)) {
-			if (value > 0) {
-				value -= game.time.physicsElapsed;
+		for (var i = 0; i < tags.length; i++) {
+			if (currentInterests[tags[i]] > 0) {
+				currentInterests[tags[i]] -= game.time.physicsElapsed;
 			} else {
-				value = 0;
+				currentInterests[tags[i]] = 0;
 			}
 		}
 		
