@@ -252,8 +252,10 @@ var playState = {
 	},
     
 	generateBook: function() {
+		let chosenTag = pickRandomTag();
 		let book = {
-			title: GenerateTitleShort(),
+			tag: chosenTag,
+			title: generateTitleShort(chosenTag),
 			author: generateName(),
 			cost: this.generateCost(),
 			spriteIndex: Math.floor(Math.random()*12)
