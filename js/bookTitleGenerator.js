@@ -5,7 +5,7 @@ var times = ["nanosecond", "second", "minute", "hour", "day", "days", "week", "f
 var nationalities = ["Irish", "Romanian", "German", "French", "Scottish", "English", "British", "Welsh", "Polish", "Russian", "Hungarian", "Canadian", "North American", "Australian", "Alien", "Foreign"];
 
 
-var problems = ["Conundrum", "Case", "Affair", "Problem", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder", "Throwdown"];
+var problems = ["Conundrum", "Case", "Affair", "Problem", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder", "Throwdown", "Betrayal"];
 
 
 function generateTitleShort(interestTag)
@@ -78,6 +78,13 @@ function generateTitleShort(interestTag)
         	result = "Examining the new " + getWord(nounsGaming);
 		} else {
         	result = getWord(nounsGaming) + " Screenshots";
+		}
+        break;
+    case 'fantasy':
+		if (formatSelect > 5) {
+        	result = "The " + getWord(nounsFantasy) + "'s " + getWord(nounsGeneric);
+		} else {
+        	result = "The " + getWord(nounsPolitics) + " of " + getWord(nounsFantasy) + "s";
 		}
         break;
     default:
