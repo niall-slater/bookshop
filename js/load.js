@@ -14,6 +14,8 @@ var loadState = {
 		//Characters
 		let maxChars = 17; //this is the number of characters in the spritesheet
         game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, maxChars, 0, 1);
+		
+		game.load.spritesheet('sheet_char', 'res/tiles/char.png', 16, 16);
         
         //UI images
         game.load.image('sheet_books', 'res/ui/sheet_books.png', 16, 16, 12, 0, 0);

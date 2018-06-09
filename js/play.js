@@ -2,6 +2,8 @@
 
 /*
 TODO:	players should be able to specify the number of copies 			they're buying
+TODO:	shop reputation goes down when people can't find the book
+		they wanted? high reputation = more customers
 TODO:	the stock menu should scroll in some way
 TODO:	there should be an option to return books that haven't
 		sold at a penalty
@@ -282,7 +284,6 @@ var playState = {
 		
 		if (panel_stock.carousel !== undefined) {
 			panel_stock.carousel.destroy();
-			console.log("DESTROYED");
 		}
 		
         
@@ -355,9 +356,9 @@ class Customer extends Phaser.Sprite {
     constructor(game, spriteIndex, x, y) {
         super(game, 0, 0);
          
-        Phaser.Sprite.call(this, game, x, y, 'sprites_characters');
-
-        this.frame = spriteIndex;
+        Phaser.Sprite.call(this, game, x, y, 'sheet_char');
+		
+        //this.frame = spriteIndex;
 		this.name = generateName();
         
         this.anchor.setTo(0.5, 0.5);
@@ -369,31 +370,30 @@ class Customer extends Phaser.Sprite {
         };
         this.behaviour_current = this.behaviours.BROWSE;
 		this.browseTarget = playState.getRandomNavPointBooks();
-        
-        this.bobMax = 1;
-        this.bobTimer = 1;
-        
+		
+		this.animSpeed = 8;
+		
+        this.anim_idle = this.animations.add('anim_idle', [0]);
+        this.anim_walk = this.animations.add('anim_walk', [0,1]);
+        this.anim_interact = this.animations.add('anim_interact', [2,3]);
+		
         game.add.existing(this);
         game.physics.arcade.enable(this);
+		this.animations.play('anim_walk', this.animSpeed, true);
     }
     
     update() {
 
-        this.bobTimer -= game.time.physicsElapsed;
-        
-        if (this.bobTimer <= 0)
-        {
-            this.bob();
-            this.bobTimer = this.bobMax;
-        }
-        
         switch (this.behaviour_current) {
             case this.behaviours.BROWSE: {
+				
+				this.animations.play('anim_walk', this.animSpeed, true);
                 game.physics.arcade.moveToXY(this, this.browseTarget.x, this.browseTarget.y, 50);
 				
 				
                 if (Math.abs(this.x - this.browseTarget.x) < 1 && Math.abs(this.y - this.browseTarget.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
+					this.animations.play('anim_idle', this.animSpeed, true);
 					
 					//Randomly choose whether to buy this book or browse for another
 					if (Math.random() > 0.5) {
@@ -402,8 +402,10 @@ class Customer extends Phaser.Sprite {
 							console.log("What do you mean you don't have any books???");
 							game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
 							break;
+							
 						}
 						game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
+						this.animations.play('anim_interact', 8, false);
 					} else {
 						//Nah
     					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE}, this);
@@ -413,7 +415,9 @@ class Customer extends Phaser.Sprite {
             }
             case this.behaviours.BUY: {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
+				this.animations.play('anim_walk', 8, false);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
+					this.animations.play('anim_interact', 8, false);
                     this.behaviour_current = this.behaviours.IDLE;
 					let book = this.selectBook();
 					if (book === undefined) {
@@ -424,7 +428,6 @@ class Customer extends Phaser.Sprite {
 					book.amount--;
 					if (book.amount < 1) {
 						bookStock.splice(bookStock.indexOf(book), 1);
-						console.log (bookStock);
 					}
 					playState.buildStock();
 					console.log(this.name + " bought a copy of " + book.title);
@@ -434,6 +437,7 @@ class Customer extends Phaser.Sprite {
                 break;
             }
             case this.behaviours.LEAVE: {
+				this.animations.play('anim_walk', 8, false);
                 game.physics.arcade.moveToXY(this, point_exit.x, point_exit.y, 50);
                 if (Math.abs(this.x - point_exit.x) < 1 && Math.abs(this.y - point_exit.y) < 1) {
                     this.behaviour_current = -1;
