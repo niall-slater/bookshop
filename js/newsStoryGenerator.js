@@ -18,7 +18,7 @@ var nounsMusic = ["band", "artist", "album", "single"];
 
 var adjectivesMusic = ["hip-hop", "pop", "rock", "country", "shoegaze", "k-pop", "industrial metal", "grime", "smooth jazz", "jazz", "afrobeat", "scat", "Gregorian Chanting", "snugglecore"];
 
-var nounsGaming = ["MMORPG", "Call of Duty", "argument about Half-Life 3", "video game distribution scandal", "crowdfunded gaming disaster", "Football Manager", "Battle Royale game", "shooter", "weird indie game", "Polygon article", "Twitch streamer racism scandal"];
+var nounsGaming = ["MMORPG", "Call of Duty", "Half-Life", "gaming scandal", "crowdfunding disaster", "Football Manager", "PUBG knockoff", "shooter", "weird indie game", "Polygon article", "streamer scandal"];
 
 function GenerateRandomNewsStory()
 {

@@ -29,7 +29,7 @@ var point_buy = {
 	y: 88
 }
 
-var spawnMax = 1000;
+var spawnMax = 10000;
 var spawnTimer = spawnMax;
 
 //UI
@@ -41,6 +41,10 @@ var cashText;
 var newsTimer;
 var bookCatalogue = [];
 var bookStock = [];
+
+var fontStyle = { font: "10px sans-serif", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
+var styleDark = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330, fontWeight: 600};
+var styleDarkWrap = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "top", wordWrap: "true", wordWrapWidth: 70, fontWeight: 600};
 
 /* SLICK COMPONENTS */
 var button_buy;
@@ -140,7 +144,6 @@ var playState = {
 		newsTimer -= game.time.physicsElapsed;
 		
 		if (newsTimer <= 0) {
-			console.log("News time");
 			let newsStory = GenerateRandomNewsStory();
 			tickerText.text = newsStory.text;
 			newsTimer = 3;
@@ -193,8 +196,6 @@ var playState = {
 	},
     
     buildUI: function() {
-        
-		var fontStyle = { font: "10px Arial", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
 
 		var bar = game.add.graphics();
 		bar.beginFill(0x000000, 0.4);
@@ -212,28 +213,28 @@ var playState = {
         
         slickUI.add(button_buy = new SlickUI.Element.Button(280, 0, 80, 20));
         button_buy.events.onInputUp.add(this.openMenuCatalogue);
-        button_buy.add(new SlickUI.Element.Text(6,0, "Buy stock"));
+        button_buy.add(new SlickUI.Element.Text(6,0, "Buy stock", 10, styleDark));
         slickUI.add(button_view = new SlickUI.Element.Button(280, 22, 80, 20));
         button_view.events.onInputUp.add(this.openMenuStock);
-        button_view.add(new SlickUI.Element.Text(6,0, "View stock"));
+        button_view.add(new SlickUI.Element.Text(6,0, "View stock", 10, styleDark));
         
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 120));
-        panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue"));
+        panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
         panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
-        panel_ordering.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
+        panel_ordering.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
         
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
 		
 		this.buildCatalogue();
 		
         slickUI.add(panel_stock = new SlickUI.Element.Panel(8, 50, 336, 120));
-        panel_stock.add(new SlickUI.Element.Text(10,0, "Current Stock"));
+        panel_stock.add(new SlickUI.Element.Text(10,0, "Current Stock", 10, styleDark));
         panel_stock.visible = false;
         panel_stock.add(panel_stock.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
-        panel_stock.exitButton.events.onInputUp.add(this.closeMenuStock);
-        panel_stock.exitButton.add(new SlickUI.Element.Text(0,0,'x')).center();
+       	panel_stock.exitButton.events.onInputUp.add(this.closeMenuStock);
+        panel_stock.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
 		
     },
 	
@@ -241,12 +242,14 @@ var playState = {
         for (var i = 0; i < bookCatalogue.length; i++) {
             let slab;
             let icon;
-            let text;
+            let title;
+            let cost;
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookCatalogue[i].spriteIndex);
-            panel_ordering.carousel.add(slab = new SlickUI.Element.Button(6 + (80 * i), 16, 70, 80));
+            panel_ordering.carousel.add(slab = new SlickUI.Element.Button(6 + (80 * i), 16, 80, 80));
             slab.add(icon = new SlickUI.Element.DisplayObject(16, 2, sprite));
-            slab.add(text = new SlickUI.Element.Text(2,24, bookCatalogue[i].title, 16, 'minecraftia', 60, 80));
-            slab.add(text = new SlickUI.Element.Text(2, 60, bookCatalogue[i].cost + " GBP", 16, 'minecraftia', 60, 80));
+            slab.add(title = new SlickUI.Element.Text(2,20, bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
+			title.text.lineSpacing = -8;
+            slab.add(cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
         }
 	},

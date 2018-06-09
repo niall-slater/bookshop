@@ -50,7 +50,7 @@ function generateTitleShort(interestTag)
 		} else if (formatSelect < 7) {
 			result = "Avoiding " + getWord(nounsBusiness) + " " + getWord(problems) + "s";
 		} else {
-			result = "Great " + getWord(nationalities) + " " + getWord(nounsBusiness);
+			result = "Great " + getWord(nationalities) + " " + getWord(nounsBusiness) + "s";
 		}
         break;
     case 'mindfulness':
