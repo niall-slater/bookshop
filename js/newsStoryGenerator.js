@@ -14,7 +14,7 @@ var nounsMindfulness = ["holistics", "the concept of hygge", "feng shui", "medit
 
 var nounsHistory = ["war", "Ancient Rome", "Ancient Greece", "Ancient Mesopotamia", "the Neolithic", "archaeology", "scrolls", "old stuff", "World War 2", "World War 1", "the Hundred Years' War", "a hip-hop musical", "the Civil War", "the War of the Roses", "colonialism", "the Mongol Empire", "wacky immigration theories"];
 
-var nounsFantasy =["dragon", "giant spider", "wizard", "magic ring", "talking lion", "ghost", "vampire", "zombie", "spell", "curse", "hobbits"]
+var nounsFantasy =["dragon", "giant spider", "wizard", "magic ring", "talking lion", "ghost", "vampire", "zombie", "spell", "curse", "hobbit"]
 
 var nounsGeneric = ["friend", "town", "knife", "cake"]
 

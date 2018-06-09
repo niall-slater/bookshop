@@ -1,8 +1,6 @@
 /* GLOBALS */
 
 /*
-TODO:	high interest levels should increase the likelihood of
-		buying a book with a matching tag
 TODO:	players should be able to specify the number of copies 			they're buying
 TODO:	the stock menu should scroll in some way
 TODO:	there should be an option to return books that haven't
@@ -259,8 +257,6 @@ var playState = {
         panel_stock.add(panel_stock.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_stock.exitButton.events.onInputUp.add(this.closeMenuStock);
         panel_stock.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
-        
-        panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 160));
 		
 		this.buildStock();
 		
@@ -283,6 +279,15 @@ var playState = {
 	},
 	
 	buildStock: function() {
+		
+		if (panel_stock.carousel !== undefined) {
+			panel_stock.carousel.destroy();
+			console.log("DESTROYED");
+		}
+		
+        
+        panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 160));
+		
         for (var i = 0; i < bookStock.length; i++) {
             let slab;
             let title;
@@ -331,7 +336,7 @@ var playState = {
 		}
 		cash -= bookCatalogue[i].cost;
 		let book = bookCatalogue[i];
-		book.amount = 15;
+		book.amount = 10;
 		bookStock.push(book)
 		cashText.text = "£" + cash;
 		bookCatalogue[i] = this.generateBook();
@@ -410,11 +415,16 @@ class Customer extends Phaser.Sprite {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
-					let book = bookStock[Math.floor(Math.random() * bookStock.length)];
+					let book = this.selectBook();
+					if (book === undefined) {
+						console.log(this.name + " couldn't find the book they wanted.");
+						break;
+					}
 					cash += book.cost;
 					book.amount--;
-					if (book.amount == 0) {
-						bookStock.splice[bookStock.indexOf(book)];
+					if (book.amount < 1) {
+						bookStock.splice(bookStock.indexOf(book), 1);
+						console.log (bookStock);
 					}
 					playState.buildStock();
 					console.log(this.name + " bought a copy of " + book.title);
@@ -438,6 +448,23 @@ class Customer extends Phaser.Sprite {
         }
     }
     
+	selectBook() {
+		let result = bookStock[Math.floor(Math.random() * bookStock.length)];
+		
+		//Loop through stocked books and *probably* pick the one with the highest current interest
+		let bestInterest = 0;
+		let peerPressureCoefficient = 0.3;
+		
+		for (var b in bookStock) {
+			if (currentInterests[b.tag] > bestInterest && Math.random() > peerPressureCoefficient) {
+				result = b;
+				bestInterest = currentInterests[b.tag];
+			}
+		}
+		
+		return result;
+	}
+	
     bob() {
         
     }
