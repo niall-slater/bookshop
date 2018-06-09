@@ -222,7 +222,7 @@ var playState = {
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
-        panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
+		panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
         panel_ordering.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
         
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
@@ -235,6 +235,10 @@ var playState = {
         panel_stock.add(panel_stock.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_stock.exitButton.events.onInputUp.add(this.closeMenuStock);
         panel_stock.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
+        
+        panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
+		
+		this.buildStock();
 		
     },
 	
@@ -251,6 +255,20 @@ var playState = {
 			title.text.lineSpacing = -8;
             slab.add(cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
+        }
+	},
+	
+	buildStock: function() {
+        for (var i = 0; i < bookStock.length; i++) {
+            let slab;
+            let title;
+            let remainder;
+			let sprite = game.make.sprite(0,0, 'sprite_book' + bookStock[i].spriteIndex);
+            panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * i), 240, 30));
+			slab.add(icon = new SlickUI.Element.DisplayObject(0, 2, sprite));
+            slab.add(title = new SlickUI.Element.Text(18,2, bookStock[i].title, 9, styleDark, 180, 30));
+			title.text.lineSpacing = -8;
+            slab.add(remainder = new SlickUI.Element.Text(172, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
         }
 	},
     
@@ -288,11 +306,13 @@ var playState = {
 			return;
 		}
 		cash -= bookCatalogue[i].cost;
-		bookStock.push(bookCatalogue[i])
-		console.log(bookStock);
+		let book = bookCatalogue[i];
+		book.amount = 15;
+		bookStock.push(book)
 		cashText.text = "£" + cash;
 		bookCatalogue[i] = this.generateBook();
 		this.buildCatalogue();
+		this.buildStock();
 	},
 	
 	generateCost: function() {
@@ -341,13 +361,20 @@ class Customer extends Phaser.Sprite {
         switch (this.behaviour_current) {
             case this.behaviours.BROWSE: {
                 game.physics.arcade.moveToXY(this, this.browseTarget.x, this.browseTarget.y, 50);
+				
+				
                 if (Math.abs(this.x - this.browseTarget.x) < 1 && Math.abs(this.y - this.browseTarget.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
 					
 					//Randomly choose whether to buy this book or browse for another
 					if (Math.random() > 0.5) {
 						//BUY!
-    					game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
+    					if (bookStock.length < 1) {
+							console.log("What do you mean you don't have any books???");
+							game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
+							break;
+						}
+						game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
 					} else {
 						//Nah
     					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE}, this);
@@ -359,8 +386,14 @@ class Customer extends Phaser.Sprite {
                 game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
                     this.behaviour_current = this.behaviours.IDLE;
-					//tickerText.text = this.name + " bought a copy of " + GenerateTitle();
-					cash += 5;
+					let book = bookStock[Math.floor(Math.random() * bookStock.length)];
+					cash += book.cost;
+					book.amount--;
+					if (book.amount == 0) {
+						bookStock.splice[bookStock.indexOf(book)];
+					}
+					playState.buildStock();
+					console.log(this.name + " bought a copy of " + book.title);
 					cashText.text = "£" + cash;
                     game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
                 }
