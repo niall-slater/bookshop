@@ -1,7 +1,8 @@
 /* GLOBALS */
 
 /*
-TODO:	players should be able to specify the number of copies 			they're buying
+TODO:	players should be able to specify the number of copies
+		they're buying
 TODO:	shop reputation goes down when people can't find the book
 		they wanted? high reputation = more customers
 TODO:	the stock menu should scroll in some way
@@ -469,10 +470,6 @@ class Customer extends Phaser.Sprite {
 		return result;
 	}
 	
-    bob() {
-        
-    }
-    
     die() {
         this.destroy();
     }
