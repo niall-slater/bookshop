@@ -17,6 +17,9 @@ var loadState = {
 		
 		game.load.spritesheet('sheet_char', 'res/tiles/char.png', 16, 16);
         
+		//Objects
+		game.load.image('sprite_bookPile', 'res/objects/bookPile.png');
+		
         //UI images
         game.load.image('sheet_books', 'res/ui/sheet_books.png', 16, 16, 12, 0, 0);
 		

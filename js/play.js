@@ -87,6 +87,7 @@ var playState = {
 		slickUI.load('res/ui/kenney/kenney.json');
 		
 		groupCharacters = game.add.group();
+		groupItems = game.add.group();
         
         game.stage.disableVisibilityChange = true;
 	},
@@ -138,6 +139,7 @@ var playState = {
 			bookCatalogue.push(this.generateBook());
         }
         
+		game.world.bringToTop(groupItems);
 		game.world.bringToTop(groupCharacters);
 
         this.spawnCustomer();
@@ -409,7 +411,8 @@ class Customer extends Phaser.Sprite {
 						this.animations.play('anim_interact', 8, false);
 					} else {
 						//Nah
-    					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE}, this);
+						this.makeMess();
+    					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE;}, this);
 					}
                 }
                 break;
@@ -422,6 +425,7 @@ class Customer extends Phaser.Sprite {
                     this.behaviour_current = this.behaviours.IDLE;
 					let book = this.selectBook();
 					if (book === undefined) {
+						this.makeMess();
 						console.log(this.name + " couldn't find the book they wanted.");
 						break;
 					}
@@ -471,6 +475,35 @@ class Customer extends Phaser.Sprite {
 	}
 	
     die() {
+        this.destroy();
+    }
+	
+	makeMess() {
+		let mess = new Mess(game, this.x, this.y);
+		groupItems.add(mess);
+	}
+    
+};
+
+class Mess extends Phaser.Sprite {
+    
+    constructor(game, x, y) {
+        super(game, 0, 0);
+         
+        Phaser.Sprite.call(this, game, x, y, 'sprite_bookPile');
+        
+        this.anchor.setTo(0.5, 0.5);
+		
+        game.add.existing(this);
+        game.physics.arcade.enable(this);
+    }
+    
+    update() {
+
+				
+    }
+    
+	onClick() {
         this.destroy();
     }
     
