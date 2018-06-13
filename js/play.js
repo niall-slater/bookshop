@@ -493,9 +493,12 @@ class Mess extends Phaser.Sprite {
         Phaser.Sprite.call(this, game, x, y, 'sprite_bookPile');
         
         this.anchor.setTo(0.5, 0.5);
+		this.inputEnabled = true;
 		
         game.add.existing(this);
         game.physics.arcade.enable(this);
+		
+    	this.events.onInputDown.add(this.onClick, this);
     }
     
     update() {
