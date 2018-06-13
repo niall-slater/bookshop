@@ -126,7 +126,7 @@ var playState = {
 			{x: 88, y: 136},
 			{x: 136, y: 88},
 			{x: 136, y: 136},
-			{x: 200, y: 72},
+			{x: 200, y: 88},
 			{x: 200, y: 136},
 			{x: 248, y: 136}
 		];		
@@ -494,19 +494,18 @@ class Mess extends Phaser.Sprite {
         
         this.anchor.setTo(0.5, 0.5);
 		this.inputEnabled = true;
+		this.angle = Math.floor(Math.random() * 360);
 		
         game.add.existing(this);
         //game.physics.arcade.enable(this);
 		
 		//this value is getting overwritten with NaN for some reason
-		this.angle = Math.floor(Math.random * 360);
-		
     	this.events.onInputDown.add(this.onClick, this);
 		
     }
     
     update() {
-		this.angle = Math.floor(Math.random * 360);
+        
 				
     }
     
