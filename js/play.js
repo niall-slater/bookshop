@@ -41,7 +41,7 @@ var point_buy = {
 	y: 88
 }
 
-var spawnMax = 10;
+var spawnMax = 1;
 var spawnTimer = spawnMax;
 
 //UI
@@ -496,13 +496,17 @@ class Mess extends Phaser.Sprite {
 		this.inputEnabled = true;
 		
         game.add.existing(this);
-        game.physics.arcade.enable(this);
+        //game.physics.arcade.enable(this);
+		
+		//this value is getting overwritten with NaN for some reason
+		this.angle = Math.floor(Math.random * 360);
 		
     	this.events.onInputDown.add(this.onClick, this);
+		
     }
     
     update() {
-
+		this.angle = Math.floor(Math.random * 360);
 				
     }
     
