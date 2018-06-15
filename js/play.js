@@ -50,6 +50,8 @@ var tickerText;
 var cash = 50;
 var cashText;
 
+var stockIndex = 0;
+
 var newsTimer;
 var bookCatalogue = [];
 var bookStock = [];
@@ -297,6 +299,8 @@ var playState = {
 	
 	buildStock: function() {
 		
+		console.log('building stock');
+		
 		if (panel_stock.carousel !== undefined) {
 			panel_stock.carousel.destroy();
 		}
@@ -304,17 +308,45 @@ var playState = {
         
         panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 160));
 		
-        for (var i = 0; i < bookStock.length; i++) {
+		let maxInList = 4;
+		let booksToList = Math.min(maxInList, bookStock.length - stockIndex);
+		
+        for (var i = stockIndex; i < stockIndex + booksToList; i++) {
             let slab;
             let title;
             let remainder;
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookStock[i].spriteIndex);
-            panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * i), 280, 30));
+            panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * (i - stockIndex)), 280, 30));
 			slab.add(icon = new SlickUI.Element.DisplayObject(0, 2, sprite));
             slab.add(title = new SlickUI.Element.Text(18,2, bookStock[i].title, 9, styleDark, 180, 30));
 			title.text.lineSpacing = -8;
             slab.add(remainder = new SlickUI.Element.Text(190, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
         }
+		
+		let button_prev;
+		panel_stock.carousel.add(button_prev = new SlickUI.Element.Button(300, 20, 20, 20));
+		button_prev.events.onInputUp.add(function(){
+			stockIndex -= maxInList;
+			if (stockIndex < 0)
+				stockIndex = 0;
+			playState.buildStock();
+		});
+		button_prev.add(new SlickUI.Element.Text(4, 0, "^", 10, styleDark));
+		let button_next;
+		panel_stock.carousel.add(button_next = new SlickUI.Element.Button(300, 100, 20, 20));
+		button_next.events.onInputUp.add(function(){
+			stockIndex += maxInList;
+			if (stockIndex > bookStock.length)
+				stockIndex = bookStock.length;
+			playState.buildStock();
+		});
+		button_next.add(new SlickUI.Element.Text(4, 0, "v", 10, styleDark));
+		
+		panel_stock.carousel.add(new SlickUI.Element.Text(280, 130, "Page " + parseInt(stockIndex/4 + 1), 10, styleDark));
+		
+		//TODO: sometimes the pagination gets confused and sticky
+		
+		console.log('index is ' + stockIndex);
 	},
     
 	generateBook: function() {
@@ -447,7 +479,7 @@ class Customer extends Phaser.Sprite {
 						bookStock.splice(bookStock.indexOf(book), 1);
 					}
 					playState.buildStock();
-					console.log(this.name + " bought a copy of " + book.title);
+//					console.log(this.name + " bought a copy of " + book.title);
 					cashText.text = "£" + cash;
                     game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
                 }
