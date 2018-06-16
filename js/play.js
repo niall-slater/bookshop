@@ -41,20 +41,24 @@ var point_buy = {
 	y: 88
 }
 
-var spawnMax = 1;
+var spawnMax = 10;
 var spawnTimer = spawnMax;
 
 //UI
 var slickUI;
 var tickerText;
 var cash = 50;
-var cashText;
 
 var stockIndex = 0;
 
 var newsTimer;
+var newsInterval = 20;
 var bookCatalogue = [];
 var bookStock = [];
+
+var popularity = 20;
+var popularityMin = 0;
+var popularityMax = 100;
 
 var fontStyle = { font: "10px sans-serif", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
 var styleDark = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330, fontWeight: 600};
@@ -63,8 +67,10 @@ var styleDarkWrap = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left
 /* SLICK COMPONENTS */
 var button_buy;
 var button_view;
+var button_status;
 var panel_ordering;
 var panel_stock;
+var panel_status;
 
 var currentInterests = {
 	'technology': 0,
@@ -172,7 +178,8 @@ var playState = {
 		if (newsTimer <= 0) {
 			let newsStory = GenerateRandomNewsStory();
 			tickerText.text = newsStory.text;
-			newsTimer = 10;
+			game.time.events.add(tickerText.lifeTime, function(){tickerText.text = ''}, this);
+			newsTimer = newsInterval;
 			currentInterests[newsStory.tag] = Math.floor(Math.random()*15) + 5;
 		}
 		
@@ -192,9 +199,16 @@ var playState = {
 		//Change spawn frequency based on total interest
 		spawnTimer -= game.time.physicsElapsed;
 		
+		//How much does public opinion affect book buying urges?
+		let publicOpinionCoefficient = 0.05;
+		
+		let spawnModifier = totalInterest * publicOpinionCoefficient * popularity;
+		
+		spawnModifier *= 0.1;
+		
 		if (spawnTimer <= 0) {
 			this.spawnCustomer();
-			spawnTimer = spawnMax - totalInterest * 0.25;
+			spawnTimer = spawnMax - spawnModifier;
 			if (spawnTimer <= 0)
 				spawnTimer = 1;
 		}		
@@ -246,18 +260,24 @@ var playState = {
 		tickerText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
 
 		tickerText.setTextBounds(2, 140, 330, 80);
-
-		cashText = game.add.text(0, 0, "£" + cash, fontStyle);
-		cashText.setShadow(0, 0, 'rgba(0,0,0,1)', 2);
-
-		cashText.setTextBounds(4, 2, 120, 16);
+		tickerText.lifeTime = 3500;
+		
+		//BUTTONS TO OPEN MENUS
         
         slickUI.add(button_buy = new SlickUI.Element.Button(280, 0, 80, 20));
         button_buy.events.onInputUp.add(this.openMenuCatalogue);
         button_buy.add(new SlickUI.Element.Text(6,0, "Buy stock", 10, styleDark));
+		
         slickUI.add(button_view = new SlickUI.Element.Button(280, 22, 80, 20));
         button_view.events.onInputUp.add(this.openMenuStock);
         button_view.add(new SlickUI.Element.Text(6,0, "View stock", 10, styleDark));
+		
+        slickUI.add(button_status = new SlickUI.Element.Button(0, 0, 80, 20));
+        button_status.events.onInputUp.add(this.openMenuStatus);
+        button_status.add(new SlickUI.Element.Text(6,0, "Shop status", 10, styleDark));
+		
+		
+		//MENU PANELS
         
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 120));
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
@@ -279,6 +299,19 @@ var playState = {
 		
 		this.buildStock();
 		
+		slickUI.add(panel_status = new SlickUI.Element.Panel(8, 50, 336, 160));
+        panel_status.add(new SlickUI.Element.Text(10,0, "Shop info", 10, styleDark));
+        panel_status.visible = false;
+        panel_status.add(panel_status.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
+       	panel_status.exitButton.events.onInputUp.add(this.closeMenuStatus);
+        panel_status.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
+		
+        panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: ' + cash, 10, styleDark));
+        panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 34, 'Popularity: ' + popularity, 10, styleDark));
+		
+		this.buildStatus();
+		
+		
     },
 	
 	buildCatalogue: function() {
@@ -299,7 +332,7 @@ var playState = {
 	
 	buildStock: function() {
 		
-		console.log('building stock');
+		//console.log('building stock');
 		
 		if (panel_stock.carousel !== undefined) {
 			panel_stock.carousel.destroy();
@@ -346,7 +379,14 @@ var playState = {
 		
 		//TODO: sometimes the pagination gets confused and sticky
 		
-		console.log('index is ' + stockIndex);
+		//console.log('index is ' + stockIndex);
+	},
+	
+	buildStatus: function() {
+		
+		panel_status.cashText.value = 'Money: ' + cash;
+		panel_status.popularityText.value = 'Popularity: ' + popularity;
+		
 	},
     
 	generateBook: function() {
@@ -363,6 +403,7 @@ var playState = {
 	
     openMenuCatalogue: function() {
         panel_stock.visible = false;
+        panel_status.visible = false;
         panel_ordering.visible = !panel_ordering.visible;
     },
     closeMenuCatalogue: function() {
@@ -372,21 +413,30 @@ var playState = {
     openMenuStock: function() {
         panel_ordering.visible = false;
         panel_ordering.carousel.x = 0;
+        panel_status.visible = false;
         panel_stock.visible = !panel_stock.visible;
     },
     closeMenuStock: function() {
         panel_stock.visible = false;
+    },
+    openMenuStatus: function() {
+        panel_ordering.visible = false;
+        panel_ordering.carousel.x = 0;
+        panel_stock.visible = false;
+        panel_status.visible = !panel_status.visible;
+    },
+    closeMenuStatus: function() {
+        panel_status.visible = false;
     },
 	
 	orderBook: function(i) {
 		if (bookCatalogue[i].cost > cash) {
 			return;
 		}
-		cash -= bookCatalogue[i].cost;
+		this.changeCash(-bookCatalogue[i].cost);
 		let book = bookCatalogue[i];
 		book.amount = 10;
 		bookStock.push(book)
-		cashText.text = "£" + cash;
 		bookCatalogue[i] = this.generateBook();
 		this.buildCatalogue();
 		this.buildStock();
@@ -395,6 +445,32 @@ var playState = {
 	generateCost: function() {
 		let result = Math.floor(Math.random() * 20) + 4;
 		return result;
+	},
+	
+	
+	popularityIncrease: function(amount) {
+		if (popularity < popularityMax) {
+			popularity += amount;
+		} else {
+			popularity = popularityMax;
+		}
+		
+		this.buildStatus();
+	},
+
+	popularityDecrease: function(amount) {
+		if (popularity > popularityMin) {
+			popularity -= amount;
+		} else {
+			popularity = popularityMin;
+		}
+
+		this.buildStatus();
+	},
+	
+	changeCash: function(amount) {
+		cash += amount;
+		this.buildStatus();
 	}
 };
 
@@ -447,15 +523,20 @@ class Customer extends Phaser.Sprite {
 						//BUY!
     					if (bookStock.length < 1) {
 							console.log("What do you mean you don't have any books???");
+							playState.popularityDecrease(2);
 							game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
 							break;
 							
 						}
 						game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
 						this.animations.play('anim_interact', 8, false);
+						playState.popularityIncrease(1);
 					} else {
 						//Nah
-						this.makeMess();
+						if (Math.random() > 0.7) {
+							game.time.events.add(500, this.makeMess, this);
+						}
+							this.makeMess();
     					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE;}, this);
 					}
                 }
@@ -469,18 +550,19 @@ class Customer extends Phaser.Sprite {
                     this.behaviour_current = this.behaviours.IDLE;
 					let book = this.selectBook();
 					if (book === undefined) {
-						this.makeMess();
+						game.time.events.add(500, this.makeMess, this);
 						console.log(this.name + " couldn't find the book they wanted.");
+						popularity.decrease(2);
 						break;
 					}
-					cash += book.cost;
+					playState.changeCash(book.cost);
 					book.amount--;
 					if (book.amount < 1) {
 						bookStock.splice(bookStock.indexOf(book), 1);
 					}
 					playState.buildStock();
 //					console.log(this.name + " bought a copy of " + book.title);
-					cashText.text = "£" + cash;
+					
                     game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
                 }
                 break;
