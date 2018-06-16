@@ -19,6 +19,7 @@ var loadState = {
         
 		//Objects
 		game.load.image('sprite_bookPile', 'res/objects/bookPile.png');
+		game.load.image('sprite_bubble', 'res/objects/bubble.png');
 		
         //UI images
         game.load.image('sheet_books', 'res/ui/sheet_books.png', 16, 16, 12, 0, 0);

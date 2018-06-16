@@ -16,6 +16,7 @@ TODO:	add events you have to deal with like author complaints
 var groupBackground;
 var groupCharacters;
 var groupItems;
+var groupEffects;
 
 //Tilemap layers
 var layer0;
@@ -63,6 +64,8 @@ var popularityMax = 100;
 var fontStyle = { font: "10px sans-serif", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
 var styleDark = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330, fontWeight: 600};
 var styleDarkWrap = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "top", wordWrap: "true", wordWrapWidth: 70, fontWeight: 600};
+var styleDarkSmall = { font: "8px sans-serif", fill: "#333", fontWeight: 600};
+
 
 /* SLICK COMPONENTS */
 var button_buy;
@@ -96,6 +99,7 @@ var playState = {
 		
 		groupCharacters = game.add.group();
 		groupItems = game.add.group();
+		groupEffects = game.add.group();
         
         game.stage.disableVisibilityChange = true;
 	},
@@ -161,6 +165,7 @@ var playState = {
         
 		game.world.bringToTop(groupItems);
 		game.world.bringToTop(groupCharacters);
+		game.world.bringToTop(groupEffects);
 
         this.spawnCustomer();
 		spawnTimer = spawnMax;
@@ -522,12 +527,13 @@ class Customer extends Phaser.Sprite {
 					if (Math.random() > 0.5) {
 						//BUY!
     					if (bookStock.length < 1) {
-							console.log("What do you mean you don't have any books???");
+							this.say('No books?');
 							playState.popularityDecrease(2);
 							game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
 							break;
 							
 						}
+						this.say('This one!')
 						game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
 						this.animations.play('anim_interact', 8, false);
 						playState.popularityIncrease(1);
@@ -536,7 +542,7 @@ class Customer extends Phaser.Sprite {
 						if (Math.random() > 0.7) {
 							game.time.events.add(500, this.makeMess, this);
 						}
-							this.makeMess();
+						this.say('Nah.')
     					game.time.events.add(Phaser.Timer.SECOND * 2, function(){this.browseTarget = playState.getRandomNavPointBooks(); this.behaviour_current = this.behaviours.BROWSE;}, this);
 					}
                 }
@@ -551,8 +557,9 @@ class Customer extends Phaser.Sprite {
 					let book = this.selectBook();
 					if (book === undefined) {
 						game.time.events.add(500, this.makeMess, this);
+						this.say(':(')
 						console.log(this.name + " couldn't find the book they wanted.");
-						popularity.decrease(2);
+						playState.popularityDecrease(2);
 						break;
 					}
 					playState.changeCash(book.cost);
@@ -560,6 +567,8 @@ class Customer extends Phaser.Sprite {
 					if (book.amount < 1) {
 						bookStock.splice(bookStock.indexOf(book), 1);
 					}
+					
+					this.say(':D');
 					playState.buildStock();
 //					console.log(this.name + " bought a copy of " + book.title);
 					
@@ -608,11 +617,16 @@ class Customer extends Phaser.Sprite {
 		let mess = new Mess(game, this.x, this.y);
 		groupItems.add(mess);
 	}
+	
+	say(text) {
+		let bubble = new SpeechBubble(game, this.x - 25, this.y - 30, text);
+		groupEffects.add(bubble);
+	}
     
 };
 
 class Mess extends Phaser.Sprite {
-    
+	
     constructor(game, x, y) {
         super(game, 0, 0);
          
@@ -625,18 +639,56 @@ class Mess extends Phaser.Sprite {
         game.add.existing(this);
         //game.physics.arcade.enable(this);
 		
-		//this value is getting overwritten with NaN for some reason
     	this.events.onInputDown.add(this.onClick, this);
+		
+		//Set a timer that hurts your popularity if messes are left lying on the floor for too long
+		this.popularityTimer = 7;
 		
     }
     
     update() {
-        
-				
+		
+		if (this.popularityTimer > 0) {
+        	this.popularityTimer -= game.time.physicsElapsed;
+		} else {
+			this.popularityTimer = 4;
+			playState.popularityDecrease(1);
+		}
     }
     
 	onClick() {
         this.destroy();
+    }
+    
+};
+
+class SpeechBubble extends Phaser.Sprite {
+	
+    constructor(game, x, y, text) {
+        super(game, 0, 0);
+		
+		let width = 50;
+		let height = 20;
+		
+        Phaser.Sprite.call(this, game, x, y, 'sprite_bubble');
+        
+		this.lifeTime = 2;
+		
+		let padding = 2;
+		
+		this.phrase = game.add.text(padding, padding, text, styleDarkSmall);
+		this.phrase.setTextBounds(x+padding, y+padding, x+width-padding, y+height-padding);
+		
+    }
+    
+    update() {
+		
+		if (this.lifeTime > 0) {
+        	this.lifeTime -= game.time.physicsElapsed;
+		} else {
+			this.phrase.destroy();
+			this.destroy();
+		}
     }
     
 };
