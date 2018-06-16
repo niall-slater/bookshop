@@ -17,6 +17,7 @@ var groupBackground;
 var groupCharacters;
 var groupItems;
 var groupEffects;
+var groupText;
 
 //Tilemap layers
 var layer0;
@@ -53,7 +54,7 @@ var cash = 50;
 var stockIndex = 0;
 
 var newsTimer;
-var newsInterval = 20;
+var newsInterval = 30;
 var bookCatalogue = [];
 var bookStock = [];
 
@@ -87,6 +88,8 @@ var currentInterests = {
 	'gaming': 0
 };
 
+var topInterest;
+
 var playState = {
     
     //State Information
@@ -100,6 +103,7 @@ var playState = {
 		groupCharacters = game.add.group();
 		groupItems = game.add.group();
 		groupEffects = game.add.group();
+		groupText = game.add.group();
         
         game.stage.disableVisibilityChange = true;
 	},
@@ -158,14 +162,12 @@ var playState = {
 		//directly from the Tiled JSON export. Don't use the Phaser functions for this.
 		
         //Generate books
-        let numBooks = 4;
-        for (var i = 0; i < numBooks; i++) {
-			bookCatalogue.push(this.generateBook());
-        }
+		this.generateBooks();
         
 		game.world.bringToTop(groupItems);
 		game.world.bringToTop(groupCharacters);
 		game.world.bringToTop(groupEffects);
+		game.world.bringToTop(groupText);
 
         this.spawnCustomer();
 		spawnTimer = spawnMax;
@@ -191,13 +193,21 @@ var playState = {
 		
 		//Keep track of how much interest there is in books
 		let totalInterest = 0;
+		let interestDecayRate = 0.5;
+		
+		let topTest = -1;
 		
 		for (var i = 0; i < tags.length; i++) {
 			if (currentInterests[tags[i]] > 0) {
 				totalInterest += currentInterests[tags[i]];
-				currentInterests[tags[i]] -= game.time.physicsElapsed/5;
+				currentInterests[tags[i]] -= game.time.physicsElapsed * interestDecayRate;
 			} else {
 				currentInterests[tags[i]] = 0;
+			}
+			
+			if (currentInterests[tags[i]] > topTest) {
+				topTest = currentInterests[tags[i]];
+				topInterest = tags[i];
 			}
 		}
 		
@@ -205,7 +215,7 @@ var playState = {
 		spawnTimer -= game.time.physicsElapsed;
 		
 		//How much does public opinion affect book buying urges?
-		let publicOpinionCoefficient = 0.05;
+		let publicOpinionCoefficient = 0.2;
 		
 		let spawnModifier = totalInterest * publicOpinionCoefficient * popularity;
 		
@@ -223,6 +233,19 @@ var playState = {
 	render: function() {
 		
 		
+	},
+	
+	generateBooks: function() {
+        let numBooks = 4;
+        for (var i = 0; i < numBooks; i++) {
+			bookCatalogue.push(this.generateBook());
+        }	
+	},
+	
+	getNewCatalogue: function() {
+		bookCatalogue = [];
+		playState.generateBooks();
+		playState.buildCatalogue();
 	},
 	
     spawnCustomer: function() {
@@ -284,12 +307,15 @@ var playState = {
 		
 		//MENU PANELS
         
-        slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 120));
+        slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 140));
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
 		panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
         panel_ordering.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
+        panel_ordering.add(panel_ordering.refreshButton = new SlickUI.Element.Button(6, 100, 90, 24));
+		panel_ordering.refreshButton.events.onInputUp.add(this.getNewCatalogue);
+        panel_ordering.refreshButton.add(new SlickUI.Element.Text(0,0,'Browse more', 10, styleDark));
         
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
 		
@@ -305,14 +331,15 @@ var playState = {
 		this.buildStock();
 		
 		slickUI.add(panel_status = new SlickUI.Element.Panel(8, 50, 336, 160));
-        panel_status.add(new SlickUI.Element.Text(10,0, "Shop info", 10, styleDark));
+        panel_status.add(new SlickUI.Element.Text(10,0, "Bookseller's Computer", 10, styleDark));
         panel_status.visible = false;
         panel_status.add(panel_status.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_status.exitButton.events.onInputUp.add(this.closeMenuStatus);
         panel_status.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
 		
         panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: ' + cash, 10, styleDark));
-        panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 34, 'Popularity: ' + popularity, 10, styleDark));
+        panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 1), 'Popularity: ' + popularity, 10, styleDark));
+        panel_status.interestText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 2), "There aren't any trends at the moment.", 10, styleDark));
 		
 		this.buildStatus();
 		
@@ -391,6 +418,10 @@ var playState = {
 		
 		panel_status.cashText.value = 'Money: ' + cash;
 		panel_status.popularityText.value = 'Popularity: ' + popularity;
+		if (topInterest === undefined) {
+			topInterest = 'nothing in particular';
+		}
+		panel_status.interestText.value = 'People seem interested in: ' + topInterest;
 		
 	},
     
@@ -523,8 +554,10 @@ class Customer extends Phaser.Sprite {
                     this.behaviour_current = this.behaviours.IDLE;
 					this.animations.play('anim_idle', this.animSpeed, true);
 					
+					let decisiveness = 0.9;
+					
 					//Randomly choose whether to buy this book or browse for another
-					if (Math.random() > 0.5) {
+					if (Math.random() < decisiveness) {
 						//BUY!
     					if (bookStock.length < 1) {
 							this.say('No books?');
@@ -539,7 +572,7 @@ class Customer extends Phaser.Sprite {
 						playState.popularityIncrease(1);
 					} else {
 						//Nah
-						if (Math.random() > 0.7) {
+						if (Math.random() > 0.5) {
 							game.time.events.add(500, this.makeMess, this);
 						}
 						this.say('Nah.')
@@ -597,13 +630,19 @@ class Customer extends Phaser.Sprite {
 		
 		//Loop through stocked books and *probably* pick the one with the highest current interest
 		let bestInterest = 0;
-		let peerPressureCoefficient = 0.3;
+		let peerPressureCoefficient = 0.9;
 		
+		//get the most popular book
 		for (var b in bookStock) {
-			if (currentInterests[b.tag] > bestInterest && Math.random() > peerPressureCoefficient) {
-				result = b;
+			if (currentInterests[b.tag] > bestInterest) {
 				bestInterest = currentInterests[b.tag];
+				result = b;
 			}
+		}
+		
+		//test against peer pressure to try and buy a random book instead
+		if (Math.random() > peerPressureCoefficient) {
+			result = bookStock[Math.floor(Math.random() * bookStock.length)];
 		}
 		
 		return result;
@@ -629,8 +668,10 @@ class Mess extends Phaser.Sprite {
 	
     constructor(game, x, y) {
         super(game, 0, 0);
-         
-        Phaser.Sprite.call(this, game, x, y, 'sprite_bookPile');
+		
+		let spriteSelector = Math.floor(Math.random()*4);
+		
+        Phaser.Sprite.call(this, game, x, y, 'sprite_bookPile_' + spriteSelector);
         
         this.anchor.setTo(0.5, 0.5);
 		this.inputEnabled = true;
@@ -672,12 +713,14 @@ class SpeechBubble extends Phaser.Sprite {
 		
         Phaser.Sprite.call(this, game, x, y, 'sprite_bubble');
         
-		this.lifeTime = 2;
+		this.lifeTime = 1;
 		
 		let padding = 2;
 		
 		this.phrase = game.add.text(padding, padding, text, styleDarkSmall);
 		this.phrase.setTextBounds(x+padding, y+padding, x+width-padding, y+height-padding);
+		
+		groupText.add(this.phrase);
 		
     }
     
