@@ -32,25 +32,25 @@ function generateTitleShort(interestTag)
         break;
     case 'space':
 		if (formatSelect > 5) {
-        	result = getWord(nounsSpace) + " of the " + getWord(nounsNature);
+        	result = "The Science of a " + getWord(nounsSpace);
 		} else {
-			result = "Exploring the " + getWord(nounsSpace);
+			result = "To Find a " + getWord(nounsSpace);
 		}
         break;
     case 'nature':
 		if (formatSelect > 5) {
-        	result = "Anatomy of a " + getWord(nounsNature);
+        	result = "Great " + getWord(nounsNature) + " Photos";
 		} else {
-			result = getWord(nationalities) + " " + getWord(nounsNature) + "s";
+			result = "The " + getWord(nationalities) + " " + getWord(nounsNature);
 		}
         break;
     case 'business':
 		if (formatSelect < 4) {
         	result = "Running a " + getWord(nounsBusiness);
 		} else if (formatSelect < 7) {
-			result = "Avoiding " + getWord(nounsBusiness) + " " + getWord(problems) + "s";
+			result = "Optimise your " + getWord(nounsBusiness);
 		} else {
-			result = "Great " + getWord(nationalities) + " " + getWord(nounsBusiness) + "s";
+			result = "The Great " + getWord(nationalities) + " " + getWord(nounsBusiness);
 		}
         break;
     case 'mindfulness':
@@ -75,9 +75,9 @@ function generateTitleShort(interestTag)
         break;
     case 'gaming':
 		if (formatSelect > 5) {
-        	result = "Examining the new " + getWord(nounsGaming);
+        	result = "Secrets of " + getWord(nounsGaming);
 		} else {
-        	result = getWord(nounsGaming) + " Screenshots";
+        	result = getWord(nounsGaming) + " Strategy Guide";
 		}
         break;
     case 'fantasy':

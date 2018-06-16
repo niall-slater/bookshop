@@ -1,16 +1,16 @@
 var tags = ["technology", "politics", "space", "nature", "business", "mindfulness", "history", "music", "gaming", "fantasy"];
 
-var nounsTechnology = ["phone", "computer", "processor", "self-driving car", "drone", "climate solution", "coffee machine", "blockchain", "laptop", "tablet", "app", "cryptocurrency", "smart lawnmower", "robot", "magnet", "camera"];
+var nounsTechnology = ["computer", "processor", "self-driving car", "drone", "machine", "blockchain", "laptop", "app", "cryptocurrency", "robot", "magnet", "dongle"];
 
-var nounsPolitics = ["ministry", "chamber", "referendum", "election", "filibuster", "brexit", "campaign", "cabinet", "expenses scandal", "oval office"];
+var nounsPolitics = ["ministry", "chamber", "referendum", "filibuster", "campaign", "cabinet", "scandal", "presidency"];
 
-var nounsSpace = ["planet", "asteroid", "comet", "super-Earth", "exoplanet", "star", "nebula", "supernova", "galaxy", "black hole", "quasar", "planetoid", "moon"];
+var nounsSpace = ["planet", "meteor", "comet", "star", "nebula", "supernova", "galaxy", "black hole", "quasar", "moon"];
 
-var nounsNature = ["frog", "flower", "baboon", "parakeet", "bonobo", "whale", "starfish", "micro-organism", "fossil", "disease", "spider", "mollusc", "aquatic monster", "dog", "cat", "volcano"];
+var nounsNature = ["frog", "flower", "baboon", "parakeet", "gorilla", "whale", "starfish", "spider", "mollusc", "dog", "cat"];
 
-var nounsBusiness = ["startup", "bank", "service provider", "corporation", "SEO agency", "enterprise", "business"];
+var nounsBusiness = ["startup", "bank", "bakery", "company", "shop", "law firm", "business"];
 
-var nounsMindfulness = ["holistics", "the concept of hygge", "feng shui", "meditation", "yoga", "mindfulness", "fidget spinning", "looking at plants", "thinking", "light exercise", "self-acceptance", "personal growth"];
+var nounsMindfulness = ["holistics", "hygge", "feng shui", "meditation", "yoga", "mindfulness", "looking at plants", "thinking", "exercise", "self-care"];
 
 var nounsHistory = ["war", "Ancient Rome", "Ancient Greece", "Ancient Mesopotamia", "the Neolithic", "archaeology", "scrolls", "old stuff", "World War 2", "World War 1", "the Hundred Years' War", "a hip-hop musical", "the Civil War", "the War of the Roses", "colonialism", "the Mongol Empire", "wacky immigration theories"];
 
@@ -20,9 +20,9 @@ var nounsGeneric = ["friend", "town", "knife", "cake"]
 
 var nounsMusic = ["band", "artist", "album", "single"];
 
-var adjectivesMusic = ["hip-hop", "pop", "rock", "country", "shoegaze", "k-pop", "industrial metal", "grime", "smooth jazz", "jazz", "afrobeat", "scat", "Gregorian Chanting", "snugglecore"];
+var adjectivesMusic = ["hip-hop", "pop", "rock", "country", "shoegaze", "k-pop", "industrial metal", "grime", "smooth jazz", "jazz", "afrobeat", "scat", "Gregorian Chanting", "snugglecore", "yodeling"];
 
-var nounsGaming = ["MMORPG", "Call of Duty", "Half-Life", "gaming scandal", "crowdfunded scandal", "Football Manager", "PUBG knockoff", "shooter", "weird indie game", "Polygon article", "streamer scandal"];
+var nounsGaming = ["MMORPG", "Call of Duty", "Half-Life", "gaming scandal", "Football Manager", "PUBG knockoff", "shooter", "weird indie game", "SimCity"];
 
 var nounsMedia = ["TV show", "movie", "film", "book", "thinkpiece", "blog", "webcomic", "play", "musical", "series"]
 
