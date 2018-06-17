@@ -381,7 +381,11 @@ var playState = {
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookStock[i].spriteIndex);
             panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * (i - stockIndex)), 280, 30));
 			slab.add(icon = new SlickUI.Element.DisplayObject(0, 2, sprite));
-            slab.add(title = new SlickUI.Element.Text(18,2, bookStock[i].title, 9, styleDark, 180, 30));
+			let displayedTitle = bookStock[i].title;
+			if (displayedTitle.length >= 30) {
+				displayedTitle = displayedTitle.substr(0, 30) + "...";
+			}
+            slab.add(title = new SlickUI.Element.Text(18,2, displayedTitle, 9, styleDark, 180, 30));
 			title.text.lineSpacing = -8;
             slab.add(remainder = new SlickUI.Element.Text(190, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
         }
