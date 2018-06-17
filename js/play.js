@@ -347,15 +347,14 @@ var playState = {
 	buildCatalogue: function() {
         for (var i = 0; i < bookCatalogue.length; i++) {
             let slab;
-            let icon;
-            let title;
-            let cost;
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookCatalogue[i].spriteIndex);
             panel_ordering.carousel.add(slab = new SlickUI.Element.Button(6 + (80 * i), 16, 80, 80));
-            slab.add(icon = new SlickUI.Element.DisplayObject(16, 2, sprite));
-            slab.add(title = new SlickUI.Element.Text(2,20, bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
-			title.text.lineSpacing = -8;
-            slab.add(cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
+            slab.add(slab.icon = new SlickUI.Element.DisplayObject(2, 2, sprite));
+			let bonusString = "+" + bookCatalogue[i].tag;
+			slab.add(slab.bonusText = new SlickUI.Element.Text(20,4, bonusString, 6, styleDarkSmall, 20, 40));
+            slab.add(slab.title = new SlickUI.Element.Text(2,20, bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
+			slab.title.text.lineSpacing = -8;
+            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
         }
 	},
