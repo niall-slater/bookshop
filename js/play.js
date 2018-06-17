@@ -578,11 +578,17 @@ class Customer extends Phaser.Sprite {
     					if (bookStock.length < 1) {
 							this.say('No books?');
 							playState.popularityDecrease(2);
+							if (Math.random() > 0.2) {
+								game.time.events.add(200, this.makeMess, this);
+							}	
 							game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
 							break;
 							
 						}
 						this.say('This one!')
+						if (Math.random() > 0.5) {
+							game.time.events.add(200, this.makeMess, this);
+						}
 						game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
 						this.animations.play('anim_interact', 8, false);
 						playState.popularityIncrease(1);
@@ -714,7 +720,16 @@ class Mess extends Phaser.Sprite {
     }
     
 	onClick() {
-        this.destroy();
+    	let puff = game.add.emitter(this.x, this.y, 10);
+		puff.makeParticles('particle_puff');
+		
+    	puff.start(true, 300, null, 5);
+		
+		puff.lifespan = 300;
+		
+		this.visible = false;
+		
+		game.time.events.add(350, function(){puff.on = false;puff.kill();this.destroy();}, this);
     }
     
 };

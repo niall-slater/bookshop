@@ -24,6 +24,8 @@ var loadState = {
 			game.load.image('sprite_bookPile_' + i, 'res/objects/bookPile_' + i + '.png');
 		}
 		
+		game.load.image('particle_puff', 'res/objects/particle.png');
+		
         //UI images
         game.load.image('sheet_books', 'res/ui/sheet_books.png', 16, 16, 12, 0, 0);
 		
