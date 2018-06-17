@@ -389,7 +389,7 @@ var playState = {
 		let button_prev;
 		panel_stock.carousel.add(button_prev = new SlickUI.Element.Button(300, 20, 20, 20));
 		button_prev.events.onInputUp.add(function(){
-			stockIndex -= maxInList;
+			stockIndex -= 1;
 			if (stockIndex < 0)
 				stockIndex = 0;
 			playState.buildStock();
@@ -398,14 +398,14 @@ var playState = {
 		let button_next;
 		panel_stock.carousel.add(button_next = new SlickUI.Element.Button(300, 100, 20, 20));
 		button_next.events.onInputUp.add(function(){
-			stockIndex += maxInList;
-			if (stockIndex > bookStock.length)
-				stockIndex = bookStock.length;
+			stockIndex += 1;
+			if (stockIndex > bookStock.length - maxInList)
+				stockIndex = bookStock.length - maxInList;
 			playState.buildStock();
 		});
 		button_next.add(new SlickUI.Element.Text(4, 0, "v", 10, styleDark));
 		
-		panel_stock.carousel.add(new SlickUI.Element.Text(280, 130, "Page " + parseInt(stockIndex/4 + 1), 10, styleDark));
+		//panel_stock.carousel.add(new SlickUI.Element.Text(280, 130, "Page " + parseInt(stockIndex/4 + 1), 10, styleDark));
 		
 		//TODO: sometimes the pagination gets confused and sticky
 		
