@@ -3,9 +3,6 @@
 /*
 TODO:	players should be able to specify the number of copies
 		they're buying
-TODO:	shop reputation goes down when people can't find the book
-		they wanted? high reputation = more customers
-TODO:	the stock menu should scroll in some way
 TODO:	there should be an option to return books that haven't
 		sold at a penalty
 TODO:	add more funny book title possibilities
@@ -309,6 +306,7 @@ var playState = {
         
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 140));
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
+        panel_ordering.add(panel_ordering.cashReadout = new SlickUI.Element.Text(120,0, "Money: £" + cash, 10, styleDark));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
 		panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
@@ -507,6 +505,7 @@ var playState = {
 	changeCash: function(amount) {
 		cash += amount;
 		this.buildStatus();
+		panel_ordering.cashReadout.value = "Money: £" + cash;
 	}
 };
 
