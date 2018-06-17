@@ -478,16 +478,12 @@ var playState = {
 		bookStock.push(book)
 		bookCatalogue[i] = this.generateBook();
 		
-		
-		console.log(book.tag + " + " + topInterest);
-		
+		//Spawn a bonus customer burst if you choose a popular book
 		if (book.tag === topInterest) {
-			console.log("good choice");
 			let delay = Math.floor(Math.random()*3) + 1;
 			let numCustomers = 3 + Math.floor(Math.random() * 5);
 			game.time.events.add(1000 * delay, function(){
 				for (var i = 0; i < numCustomers; i++) {
-					console.log("spawning");
 					this.spawnCustomer();
 				}
 			}, this);
