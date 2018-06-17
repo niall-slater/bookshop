@@ -8,7 +8,6 @@ TODO:	there should be an option to return books that haven't
 TODO:	add more funny book title possibilities
 TODO:	add events you have to deal with like author complaints
 TODO:	add expenditure so lots of books cost money or effort to stock
-TODO:	if you've got books with a popular tag people should rush in
 */
 
 //Groups

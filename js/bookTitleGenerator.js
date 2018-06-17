@@ -4,6 +4,8 @@ var surnames = ["Ahmed", "Trotter", "Harding", "Cornwell", "Smith", "Shaw", "Blo
 var times = ["nanosecond", "second", "minute", "hour", "day", "days", "week", "fortnight", "year", "years", "decade", "lifetime", "bender", "spree", "rampage", "lunchtime", "breakfast", "midnight snack", "interstellar journey", "regrettable period"];
 var nationalities = ["Irish", "Romanian", "German", "French", "Scottish", "English", "British", "Welsh", "Polish", "Russian", "Hungarian", "Canadian", "North American", "Australian", "Alien", "Foreign"];
 
+//infinitives only
+var verbs = ["catch", "study", "follow", "love", "build", "kiss", "smaench", "eat", "pat"];
 
 var problems = ["Conundrum", "Case", "Affair", "Problem", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder", "Throwdown", "Betrayal"];
 
@@ -34,7 +36,7 @@ function generateTitleShort(interestTag)
 		if (formatSelect > 5) {
         	result = "The Science of a " + getWord(nounsSpace);
 		} else {
-			result = "To Find a " + getWord(nounsSpace);
+			result = "To " + getWord(verbs) + " a " + getWord(nounsSpace);
 		}
         break;
     case 'nature':
