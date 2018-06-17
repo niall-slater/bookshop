@@ -7,6 +7,8 @@ TODO:	there should be an option to return books that haven't
 		sold at a penalty
 TODO:	add more funny book title possibilities
 TODO:	add events you have to deal with like author complaints
+TODO:	add expenditure so lots of books cost money or effort to stock
+TODO:	if you've got books with a popular tag people should rush in
 */
 
 //Groups
@@ -475,6 +477,22 @@ var playState = {
 		book.amount = 10;
 		bookStock.push(book)
 		bookCatalogue[i] = this.generateBook();
+		
+		
+		console.log(book.tag + " + " + topInterest);
+		
+		if (book.tag === topInterest) {
+			console.log("good choice");
+			let delay = Math.floor(Math.random()*3) + 1;
+			let numCustomers = 3 + Math.floor(Math.random() * 5);
+			game.time.events.add(1000 * delay, function(){
+				for (var i = 0; i < numCustomers; i++) {
+					console.log("spawning");
+					this.spawnCustomer();
+				}
+			}, this);
+		}
+		
 		this.buildCatalogue();
 		this.buildStock();
 	},
