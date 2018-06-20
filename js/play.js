@@ -60,6 +60,10 @@ var popularity = 20;
 var popularityMin = 0;
 var popularityMax = 100;
 
+var expenditure = 0;
+var expenditureInterval = 5;
+var expenditureTimer;
+
 var fontStyle = { font: "10px sans-serif", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
 var styleDark = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330, fontWeight: 600};
 var styleDarkWrap = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "top", wordWrap: "true", wordWrapWidth: 70, fontWeight: 600};
@@ -174,6 +178,8 @@ var playState = {
         
         this.buildUI();
 		newsTimer = 1;
+        expenditure = 0;
+        expenditureTimer = expenditureInterval;
 	},
 	
 	update: function() {
@@ -208,6 +214,15 @@ var playState = {
 				topInterest = tags[i];
 			}
 		}
+        
+        //Calculate and deduct expenditure from cash
+		expenditureTimer -= game.time.physicsElapsed;
+		if (expenditureTimer <= 0) {
+            expenditure = bookStock.length;
+			this.changeCash(-expenditure);
+			expenditureTimer = expenditureInterval;
+		}
+		
 		
 		//Change spawn frequency based on total interest
 		spawnTimer -= game.time.physicsElapsed;
@@ -339,6 +354,7 @@ var playState = {
         panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: ' + cash, 10, styleDark));
         panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 1), 'Popularity: ' + popularity, 10, styleDark));
         panel_status.interestText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 2), "There aren't any trends at the moment.", 10, styleDark));
+        panel_status.expenditureText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 3), "Current expenditure is: " + expenditure, 10, styleDark));
 		
 		this.buildStatus();
 		
@@ -424,6 +440,7 @@ var playState = {
 			topInterest = 'nothing in particular';
 		}
 		panel_status.interestText.value = 'People seem interested in: ' + topInterest;
+		panel_status.expenditureText.value = 'Current expenditure: £' + expenditure;
 		
 	},
     
