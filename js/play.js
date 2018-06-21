@@ -351,7 +351,7 @@ var playState = {
        	panel_status.exitButton.events.onInputUp.add(this.closeMenuStatus);
         panel_status.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
 		
-        panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: ' + cash, 10, styleDark));
+        panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: £' + cash, 10, styleDark));
         panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 1), 'Popularity: ' + popularity, 10, styleDark));
         panel_status.interestText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 2), "There aren't any trends at the moment.", 10, styleDark));
         panel_status.expenditureText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 3), "Current expenditure is: " + expenditure, 10, styleDark));
@@ -434,7 +434,7 @@ var playState = {
 	
 	buildStatus: function() {
 		
-		panel_status.cashText.value = 'Money: ' + cash;
+		panel_status.cashText.value = 'Money: £' + cash;
 		panel_status.popularityText.value = 'Popularity: ' + popularity;
 		if (topInterest === undefined) {
 			topInterest = 'nothing in particular';
@@ -739,13 +739,14 @@ class Mess extends Phaser.Sprite {
     	let puff = game.add.emitter(this.x, this.y, 10);
 		puff.makeParticles('particle_puff');
 		
-    	puff.start(true, 300, null, 5);
+		puff.setAlpha(1, 0, 250);
+		puff.maxParticleSpeed = 0;
+    	puff.start(true, 250, null, 3);
 		
-		puff.lifespan = 300;
 		
-		this.visible = false;
+		game.time.events.add(75, function(){this.visible = false;}, this);
 		
-		game.time.events.add(350, function(){puff.on = false;puff.kill();this.destroy();}, this);
+		game.time.events.add(250, function(){puff.on = false;puff.kill();this.destroy();}, this);
     }
     
 };
