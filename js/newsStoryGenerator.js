@@ -22,7 +22,7 @@ var nounsMusic = ["band", "artist", "album", "single"];
 
 var adjectivesMusic = ["hip-hop", "pop", "rock", "country", "shoegaze", "k-pop", "industrial metal", "grime", "smooth jazz", "jazz", "afrobeat", "scat", "Gregorian Chanting", "snugglecore", "yodeling"];
 
-var nounsGaming = ["MMORPG", "Call of Duty", "Half-Life", "gaming scandal", "Football Manager", "PUBG knockoff", "shooter", "weird indie game", "SimCity"];
+var nounsGaming = ["Pokemon", "Mario", "gaming scandals", "Football Manager", "shooters", "weird indie games", "SimCity"];
 
 var nounsMedia = ["TV show", "movie", "film", "book", "thinkpiece", "blog", "webcomic", "play", "musical", "series"]
 

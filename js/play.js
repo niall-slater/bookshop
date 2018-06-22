@@ -592,7 +592,7 @@ class Customer extends Phaser.Sprite {
 					if (Math.random() < decisiveness) {
 						//BUY!
     					if (bookStock.length < 1) {
-							this.say('No books?');
+							this.say('No new books?');
 							playState.popularityDecrease(2);
 							if (Math.random() > 0.2) {
 								game.time.events.add(200, this.makeMess, this);
@@ -760,7 +760,7 @@ class SpeechBubble extends Phaser.Sprite {
 		let height = 20;
 		
         Phaser.Sprite.call(this, game, x, y, 'sprite_bubble');
-        
+		
 		this.lifeTime = 1;
 		
 		let padding = 2;
@@ -769,6 +769,16 @@ class SpeechBubble extends Phaser.Sprite {
 		this.phrase.setTextBounds(x+padding, y+padding, x+width-padding, y+height-padding);
 		
 		groupText.add(this.phrase);
+		
+		let stretch = text.length / 10;
+		
+		if (stretch < 1) {
+			stretch = 1;
+		}
+		
+		console.log(stretch);
+		
+		this.scale.setTo(stretch, 1);
 		
     }
     

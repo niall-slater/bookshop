@@ -13,6 +13,8 @@ var adjectives = ["Engorged", "Slippery", "Fast", "Wanted", "Dangerous", "Heartb
 
 var nouns_proper = ["Smaenching", "Plague", "Suffering", "Pleasure", "Food", "Stuff", "Complaining", "Torture", "Fun", "Bookselling", "Piling up Rocks", "Wasting Time", "Faffing About"];
 
+var nouns_settings = ["Pocket", "Hole", "Fridge", "Field", "Pit", "Cave", "Sea"];
+
 function generateTitleShort(interestTag)
 {
     var result = "";
@@ -43,7 +45,7 @@ function generateTitleShort(interestTag)
         		result = getWord(problems) + " in the " + getWord(nounsPolitics);
 				break;
 			case 1:
-				result = "The " + getWord(nounsPolitics) + " of " + getRandomRecentYear;
+				result = "The " + getWord(nounsPolitics) + " of " + getRandomRecentYear();
 				break;
 			case 2:
 				result = "One " + getWord(adjectives) + " " + getWord(nounsPolitics);
@@ -126,7 +128,7 @@ function generateTitleShort(interestTag)
 				result = "Remembering " + getWord(nounsHistory);
 				break;
 			case 2:
-				result = "How to " + getWord(verbs) + " in " + getRandomOldYear() + "?";
+				result = "Did People " + getWord(verbs) + " in " + getRandomOldYear() + "?";
 				break;
 			case 3:
 				result = "A Comprehensive History of " + getWord(nouns_proper);
@@ -158,7 +160,7 @@ function generateTitleShort(interestTag)
 				result = getWord(nounsGaming) + " Strategy Guide";
 				break;
 			case 2:
-				result = "Scandals in " + getWord(nounsGaming);
+				result = "Get Better at " + getWord(nounsGaming);
 				break;
 			case 3:
 				result = "Tales from a " + getWord(nounsGaming) + " Expert";
@@ -171,7 +173,7 @@ function generateTitleShort(interestTag)
 				result = "The " + getWord(nounsFantasy) + "'s " + getWord(nounsGeneric);
 				break;
 			case 1:
-				result = "The " + getWord(nounsPolitics) + " of " + getWord(nounsFantasy) + "s";
+				result = "The " + getWord(nouns_settings) + " of " + getWord(nounsFantasy) + "s";
 				break;
 			case 2:
 				result = "To " + getWord(verbs) + " a " + getWord(nounsFantasy);
