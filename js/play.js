@@ -776,8 +776,6 @@ class SpeechBubble extends Phaser.Sprite {
 			stretch = 1;
 		}
 		
-		console.log(stretch);
-		
 		this.scale.setTo(stretch, 1);
 		
     }
