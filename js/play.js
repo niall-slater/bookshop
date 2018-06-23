@@ -10,7 +10,6 @@ TODO:	players should be able to specify the number of copies
 		they're buying
 TODO:	there should be an option to return books that haven't
 		sold at a penalty
-		
 */
 
 //Groups
