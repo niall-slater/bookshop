@@ -6,8 +6,6 @@ TODO:	spend money for upgrades to bookshop
 TODO:	popularity should have a more obvious impact on foot traffic
 TODO:	bad decisions should impact gameplay
 TODO:	authors should move faster the longer the game goes on
-TODO:	players should be able to specify the number of copies
-		they're buying
 TODO:	there should be an option to return books that haven't
 		sold at a penalty
 */
@@ -351,7 +349,15 @@ var playState = {
         panel_ordering.add(panel_ordering.refreshButton = new SlickUI.Element.Button(6, 100, 90, 24));
 		panel_ordering.refreshButton.events.onInputUp.add(this.getNewCatalogue);
         panel_ordering.refreshButton.add(new SlickUI.Element.Text(0,0,'Browse more', 10, styleDark));
-        
+		panel_ordering.add(panel_ordering.quantityDown = new SlickUI.Element.Button(100, 104, 20, 18));
+		panel_ordering.add(panel_ordering.quantityUp = new SlickUI.Element.Button(170, 104, 20, 18));
+        panel_ordering.quantityDown.add(new SlickUI.Element.Text(0,0,'-', 10, styleDark));
+        panel_ordering.quantityUp.add(new SlickUI.Element.Text(0,0,'+', 10, styleDark));
+		panel_ordering.quantity = 10;
+		panel_ordering.quantityDown.events.onInputUp.add(function(){if (panel_ordering.quantity > 0){panel_ordering.quantity--;playState.buildCatalogue();}});
+		panel_ordering.quantityUp.events.onInputUp.add(function(){if (panel_ordering.quantity < 99){panel_ordering.quantity++;playState.buildCatalogue();}});
+        panel_ordering.quantityText = panel_ordering.add(new SlickUI.Element.Text(120, 106, panel_ordering.quantity + ' copies', 10, styleDark));
+		
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
 		
 		panel_ordering.slabs = []
@@ -390,6 +396,8 @@ var playState = {
 			panel_ordering.slabs[i].destroy();
 		}
 		
+		panel_ordering.quantityText.value = panel_ordering.quantity + ' copies';
+		
         for (var i = 0; i < bookCatalogue.length; i++) {
             let slab;
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookCatalogue[i].spriteIndex);
@@ -399,15 +407,13 @@ var playState = {
 			slab.add(slab.bonusText = new SlickUI.Element.Text(20,4, bonusString, 6, styleDarkSmall, 20, 40));
             slab.add(slab.title = new SlickUI.Element.Text(2,20, bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
 			slab.title.text.lineSpacing = -8;
-            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost + " for 10", 10, styleDark));
+            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
 			panel_ordering.slabs.push(slab);
         }
 	},
 	
 	buildStock: function() {
-		
-		//console.log('building stock');
 		
 		if (panel_stock.carousel !== undefined) {
 			panel_stock.carousel.destroy();
@@ -452,12 +458,6 @@ var playState = {
 			playState.buildStock();
 		});
 		button_next.add(new SlickUI.Element.Text(4, 0, "v", 10, styleDark));
-		
-		//panel_stock.carousel.add(new SlickUI.Element.Text(280, 130, "Page " + parseInt(stockIndex/4 + 1), 10, styleDark));
-		
-		//TODO: sometimes the pagination gets confused and sticky
-		
-		//console.log('index is ' + stockIndex);
 	},
 	
 	buildStatus: function() {
@@ -513,12 +513,15 @@ var playState = {
     },
 	
 	orderBook: function(i) {
-		if (bookCatalogue[i].cost > cash) {
+		
+		let spend = bookCatalogue[i].cost * panel_ordering.quantity;
+		
+		if (spend > cash) {
 			return;
 		}
-		this.changeCash(-bookCatalogue[i].cost);
+		this.changeCash(-spend);
 		let book = bookCatalogue[i];
-		book.amount = 10;
+		book.amount = panel_ordering.quantity;
 		bookStock.push(book)
 		bookCatalogue[i] = this.generateBook();
 		
@@ -538,7 +541,7 @@ var playState = {
 	},
 	
 	generateCost: function() {
-		let result = Math.floor(Math.random() * 16) + 4;
+		let result = Math.floor(Math.random() * 10) + 4;
 		return result;
 	},
 	
