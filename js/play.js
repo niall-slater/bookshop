@@ -1,13 +1,16 @@
 /* GLOBALS */
 
 /*
+TODO:	add progression and achievements to reward high popularity and income
+TODO:	spend money for upgrades to bookshop
+TODO:	popularity should have a more obvious impact on foot traffic
+TODO:	bad decisions should impact gameplay
+TODO:	authors should move faster the longer the game goes on
+TODO:	is the buy menu using more memory as the game goes on?
 TODO:	players should be able to specify the number of copies
 		they're buying
 TODO:	there should be an option to return books that haven't
 		sold at a penalty
-TODO:	add more funny book title possibilities
-TODO:	add events you have to deal with like author complaints
-TODO:	add expenditure so lots of books cost money or effort to stock
 */
 
 //Groups

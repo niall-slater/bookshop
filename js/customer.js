@@ -97,7 +97,7 @@ class Customer extends Phaser.Sprite {
 						bookStock.splice(bookStock.indexOf(book), 1);
 					}
 					
-					this.say(':D');
+					this.say('Thank you!');
 					playState.buildStock();
 //					console.log(this.name + " bought a copy of " + book.title);
 					

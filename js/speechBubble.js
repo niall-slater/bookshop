@@ -6,25 +6,33 @@ class SpeechBubble extends Phaser.Sprite {
 		let width = 50;
 		let height = 20;
 		
-        Phaser.Sprite.call(this, game, x, y, 'sprite_bubble');
+        y = y + Math.random() * 6 - 3;
+		
+		this.anchor.setTo(0.5, 0.5);
+		
+		this.background = Phaser.Sprite.call(this, game, x, y, '');
+		
+        this.background = new Phaser.Sprite(game, 0, 0, 'sprite_bubble');
 		
 		this.lifeTime = 1;
 		
 		let padding = 2;
 		
 		this.phrase = game.add.text(padding, padding, text, styleDarkSmall);
-		this.phrase.setTextBounds(x+padding, y+padding, x+width-padding, y+height-padding);
 		
-		groupText.add(this.phrase);
+		//groupText.add(this.phrase);
+		this.addChild(this.background);
+		this.addChild(this.phrase);
+		this.phrase.setTextBounds(padding, padding);
 		
-		let stretch = text.length / 10;
+		
+		let stretch = padding * 2 + text.length * 5;
 		
 		if (stretch < 1) {
 			stretch = 1;
 		}
 		
-		this.scale.setTo(stretch, 1);
-		
+		this.background.width = stretch;
     }
     
     update() {
