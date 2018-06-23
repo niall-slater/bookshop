@@ -154,7 +154,7 @@ class Customer extends Phaser.Sprite {
 	}
 	
 	say(text) {
-		let bubble = new SpeechBubble(game, this.x - 25, this.y - 30, text);
+		let bubble = new SpeechBubble(game, this.x - 15, this.y - 30, text);
 		groupEffects.add(bubble);
 	}
     

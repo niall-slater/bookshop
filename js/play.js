@@ -43,6 +43,10 @@ var point_buy = {
 	x: 280,
 	y: 88
 }
+var point_bookseller = {
+	x: 312,
+	y: 88
+}
 
 var spawnMax = 10;
 var spawnTimer = spawnMax;
@@ -133,6 +137,11 @@ var playState = {
 		layer1.resizeWorld();
 		layer2 = map.createLayer('furniture');
 		layer2.resizeWorld();
+		
+		//Create bookseller
+		
+        let bookseller = new Bookseller(game, 0, point_bookseller.x, point_bookseller.y);
+		groupCharacters.add(bookseller);
 		
 		//Load nav points
 		
