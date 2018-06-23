@@ -399,7 +399,7 @@ var playState = {
 			slab.add(slab.bonusText = new SlickUI.Element.Text(20,4, bonusString, 6, styleDarkSmall, 20, 40));
             slab.add(slab.title = new SlickUI.Element.Text(2,20, bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
 			slab.title.text.lineSpacing = -8;
-            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
+            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost + " for 10", 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
 			panel_ordering.slabs.push(slab);
         }
@@ -538,7 +538,7 @@ var playState = {
 	},
 	
 	generateCost: function() {
-		let result = Math.floor(Math.random() * 20) + 4;
+		let result = Math.floor(Math.random() * 16) + 4;
 		return result;
 	},
 	
