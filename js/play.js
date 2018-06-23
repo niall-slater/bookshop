@@ -6,7 +6,6 @@ TODO:	spend money for upgrades to bookshop
 TODO:	popularity should have a more obvious impact on foot traffic
 TODO:	bad decisions should impact gameplay
 TODO:	authors should move faster the longer the game goes on
-TODO:	is the buy menu using more memory as the game goes on?
 TODO:	players should be able to specify the number of copies
 		they're buying
 TODO:	there should be an option to return books that haven't
@@ -355,6 +354,8 @@ var playState = {
         
         panel_ordering.carousel = panel_ordering.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 118));
 		
+		panel_ordering.slabs = []
+		
 		this.buildCatalogue();
 		
         slickUI.add(panel_stock = new SlickUI.Element.Panel(8, 50, 336, 160));
@@ -384,6 +385,11 @@ var playState = {
     },
 	
 	buildCatalogue: function() {
+		
+		for (var i = 0; i < panel_ordering.slabs.length; i++) {
+			panel_ordering.slabs[i].destroy();
+		}
+		
         for (var i = 0; i < bookCatalogue.length; i++) {
             let slab;
 			let sprite = game.make.sprite(0,0, 'sprite_book' + bookCatalogue[i].spriteIndex);
@@ -395,6 +401,7 @@ var playState = {
 			slab.title.text.lineSpacing = -8;
             slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
+			panel_ordering.slabs.push(slab);
         }
 	},
 	
@@ -406,7 +413,6 @@ var playState = {
 			panel_stock.carousel.destroy();
 		}
 		
-        
         panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 160));
 		
 		let maxInList = 4;
