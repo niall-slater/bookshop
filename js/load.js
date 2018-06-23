@@ -16,6 +16,7 @@ var loadState = {
         game.load.spritesheet('sprites_characters', 'res/tiles/roguelikeChar_transparent.png', 16, 16, maxChars, 0, 1);
 		
 		game.load.spritesheet('sheet_char', 'res/tiles/char.png', 16, 16);
+		game.load.spritesheet('sheet_author', 'res/tiles/author.png', 16, 16);
         
 		//Objects
 		game.load.image('sprite_bubble', 'res/objects/bubble.png');

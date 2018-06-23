@@ -232,7 +232,11 @@ var playState = {
 		spawnModifier *= 0.1;
 		
 		if (spawnTimer <= 0) {
-			this.spawnCustomer();
+			if (Math.random() < 0.9) {
+				this.spawnCustomer();	
+			} else {
+				this.spawnAuthor();
+			}
 			spawnTimer = spawnMax - spawnModifier;
 			if (spawnTimer <= 0)
 				spawnTimer = 1;
@@ -265,6 +269,15 @@ var playState = {
 		
         let customer = new Customer(game, selector, point_enter.x, point_enter.y);
 		groupCharacters.add(customer);
+	},
+	
+    spawnAuthor: function() {
+		
+		let maxChars = 15; //this is the number of characters in the spritesheet
+		let selector = Math.floor(Math.random() * maxChars);
+		
+        let author = new Author(game, selector, point_enter.x, point_enter.y);
+		groupCharacters.add(author);
         
 		
 	},

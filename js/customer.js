@@ -13,12 +13,14 @@ class Customer extends Phaser.Sprite {
         this.behaviours = {
             BROWSE: 0,
             BUY: 1,
-            LEAVE: 2
+            LEAVE: 2,
+			IDLE: 3
         };
         this.behaviour_current = this.behaviours.BROWSE;
 		this.browseTarget = playState.getRandomNavPointBooks();
 		
 		this.animSpeed = 8;
+		this.moveSpeed = 50;
 		
         this.anim_idle = this.animations.add('anim_idle', [0]);
         this.anim_walk = this.animations.add('anim_walk', [0,1]);
@@ -35,7 +37,7 @@ class Customer extends Phaser.Sprite {
             case this.behaviours.BROWSE: {
 				
 				this.animations.play('anim_walk', this.animSpeed, true);
-                game.physics.arcade.moveToXY(this, this.browseTarget.x, this.browseTarget.y, 50);
+                game.physics.arcade.moveToXY(this, this.browseTarget.x, this.browseTarget.y, this.moveSpeed);
 				
 				
                 if (Math.abs(this.x - this.browseTarget.x) < 1 && Math.abs(this.y - this.browseTarget.y) < 1) {
@@ -50,7 +52,7 @@ class Customer extends Phaser.Sprite {
     					if (bookStock.length < 1) {
 							this.say('No new books?');
 							playState.popularityDecrease(2);
-							if (Math.random() > 0.2) {
+							if (Math.random() > 0.5) {
 								game.time.events.add(200, this.makeMess, this);
 							}	
 							game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
@@ -58,7 +60,7 @@ class Customer extends Phaser.Sprite {
 							
 						}
 						this.say('This one!')
-						if (Math.random() > 0.5) {
+						if (Math.random() > 0.8) {
 							game.time.events.add(200, this.makeMess, this);
 						}
 						game.time.events.add(Phaser.Timer.SECOND, function(){this.behaviour_current = this.behaviours.BUY}, this);
@@ -66,7 +68,7 @@ class Customer extends Phaser.Sprite {
 						playState.popularityIncrease(1);
 					} else {
 						//Nah
-						if (Math.random() > 0.5) {
+						if (Math.random() > 0.8) {
 							game.time.events.add(500, this.makeMess, this);
 						}
 						this.say('Nah.')
@@ -76,7 +78,7 @@ class Customer extends Phaser.Sprite {
                 break;
             }
             case this.behaviours.BUY: {
-                game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, 50);
+                game.physics.arcade.moveToXY(this, point_buy.x, point_buy.y, this.moveSpeed);
 				this.animations.play('anim_walk', 8, false);
                 if (Math.abs(this.x - point_buy.x) < 1 && Math.abs(this.y - point_buy.y) < 1) {
 					this.animations.play('anim_interact', 8, false);
@@ -105,7 +107,7 @@ class Customer extends Phaser.Sprite {
             }
             case this.behaviours.LEAVE: {
 				this.animations.play('anim_walk', 8, false);
-                game.physics.arcade.moveToXY(this, point_exit.x, point_exit.y, 50);
+                game.physics.arcade.moveToXY(this, point_exit.x, point_exit.y, this.moveSpeed);
                 if (Math.abs(this.x - point_exit.x) < 1 && Math.abs(this.y - point_exit.y) < 1) {
                     this.behaviour_current = -1;
                     this.die();
