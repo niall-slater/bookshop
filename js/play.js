@@ -59,6 +59,7 @@ var newsTimer;
 var newsInterval = 30;
 var bookCatalogue = [];
 var bookStock = [];
+var markup = 1.25;
 
 var popularity = 20;
 var popularityMin = 0;
@@ -251,6 +252,18 @@ var playState = {
 				spawnTimer = 1;
 		}		
 		
+		//Reduce demand for individual books the older they get
+		let demandDecayRate = 1;
+		
+		for (var i = 0; i < bookStock.length; i++) {
+			let book = bookStock[i];
+			if (i.demand > 0) {
+				i.demand -= game.time.physicsElapsed * demandDecayRate;
+			} else {
+				i.demand = 0;
+			}
+		}
+		
 	},
 	
 	render: function() {
@@ -432,12 +445,16 @@ var playState = {
             panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * (i - stockIndex)), 280, 30));
 			slab.add(icon = new SlickUI.Element.DisplayObject(0, 2, sprite));
 			let displayedTitle = bookStock[i].title;
-			if (displayedTitle.length >= 30) {
-				displayedTitle = displayedTitle.substr(0, 30) + "...";
+			if (displayedTitle.length >= 25) {
+				displayedTitle = displayedTitle.substr(0, 25) + "...";
 			}
             slab.add(title = new SlickUI.Element.Text(18,2, displayedTitle, 9, styleDark, 180, 30));
 			title.text.lineSpacing = -8;
-            slab.add(remainder = new SlickUI.Element.Text(190, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
+            slab.add(remainder = new SlickUI.Element.Text(170, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
+			let returnButton;
+			slab.add(returnButton = new SlickUI.Element.Button(228, 1, 40, 20));
+			returnButton.add(new SlickUI.Element.Text(2,0, "Return", 9, styleDarkSmall));
+			returnButton.events.onInputUp.add(function(){playState.returnBook(displayedTitle);});
         }
 		
 		let button_prev;
@@ -479,7 +496,8 @@ var playState = {
 			title: generateTitleShort(chosenTag),
 			author: generateName(),
 			cost: this.generateCost(),
-			spriteIndex: Math.floor(Math.random()*12)
+			spriteIndex: Math.floor(Math.random()*12),
+			demand: 100
 		};
 		return book;
 	},
@@ -540,6 +558,12 @@ var playState = {
 		this.buildStock();
 	},
 	
+	returnBook: function(book) {
+		book.amount = 0;
+		bookStock.splice(bookStock.indexOf(book), 1);
+		this.buildStock();
+	},
+	
 	generateCost: function() {
 		let result = Math.floor(Math.random() * 10) + 4;
 		return result;
@@ -570,5 +594,14 @@ var playState = {
 		cash += amount;
 		this.buildStatus();
 		panel_ordering.cashReadout.value = "Money: £" + cash;
+	},
+	
+	makeSale: function(book) {
+		this.changeCash(book.cost * markup);
+		book.amount--;
+		if (book.amount < 1) {
+			bookStock.splice(bookStock.indexOf(book), 1);
+		}
+		this.buildStock();
 	}
 };

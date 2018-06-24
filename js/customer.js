@@ -86,19 +86,15 @@ class Customer extends Phaser.Sprite {
 					let book = this.selectBook();
 					if (book === undefined) {
 						game.time.events.add(500, this.makeMess, this);
-						this.say(':(')
+						this.say('Not for sale?')
 						console.log(this.name + " couldn't find the book they wanted.");
 						playState.popularityDecrease(2);
+						this.behaviour_current = this.behaviours.LEAVE;
 						break;
 					}
-					playState.changeCash(book.cost);
-					book.amount--;
-					if (book.amount < 1) {
-						bookStock.splice(bookStock.indexOf(book), 1);
-					}
+					playState.makeSale(book);
 					
 					this.say('Thank you!');
-					playState.buildStock();
 //					console.log(this.name + " bought a copy of " + book.title);
 					
                     game.time.events.add(1000, function(){this.behaviour_current = this.behaviours.LEAVE}, this);
@@ -136,8 +132,18 @@ class Customer extends Phaser.Sprite {
 			}
 		}
 		
+		if (result === undefined) {
+			//The book has vanished on the way to the till, probably because the player returned the stock
+			//this shouldn't really happen unless there's only like one book in stock
+			return undefined;
+			
+		}
+		
 		//test against peer pressure to try and buy a random book instead
-		if (Math.random() > peerPressureCoefficient) {
+		//if the book's demand is low (it reduces over time while in stock) then try to find another
+		//this makes unpopular books stay on the shelf forever until you return them at a loss
+		let cantShiftThisBookDemandThreshold = 5;
+		if (Math.random() > peerPressureCoefficient || result.demand < cantShiftThisBookDemandThreshold) {
 			result = bookStock[Math.floor(Math.random() * bookStock.length)];
 		}
 		
