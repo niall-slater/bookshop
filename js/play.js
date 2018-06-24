@@ -51,7 +51,7 @@ var spawnTimer = spawnMax;
 //UI
 var slickUI;
 var tickerText;
-var cash = 50;
+var cash = 250;
 
 var stockIndex = 0;
 
@@ -351,10 +351,10 @@ var playState = {
         panel_ordering.refreshButton.add(new SlickUI.Element.Text(0,0,'Browse more', 10, styleDark));
 		panel_ordering.add(panel_ordering.quantityDown = new SlickUI.Element.Button(100, 104, 20, 18));
 		panel_ordering.add(panel_ordering.quantityUp = new SlickUI.Element.Button(170, 104, 20, 18));
-        panel_ordering.quantityDown.add(new SlickUI.Element.Text(0,0,'-', 10, styleDark));
-        panel_ordering.quantityUp.add(new SlickUI.Element.Text(0,0,'+', 10, styleDark));
+        panel_ordering.quantityDown.add(new SlickUI.Element.Text(3,-2,'-', 10, styleDark));
+        panel_ordering.quantityUp.add(new SlickUI.Element.Text(3,-2,'+', 10, styleDark));
 		panel_ordering.quantity = 10;
-		panel_ordering.quantityDown.events.onInputUp.add(function(){if (panel_ordering.quantity > 0){panel_ordering.quantity--;playState.buildCatalogue();}});
+		panel_ordering.quantityDown.events.onInputUp.add(function(){if (panel_ordering.quantity > 1){panel_ordering.quantity--;playState.buildCatalogue();}});
 		panel_ordering.quantityUp.events.onInputUp.add(function(){if (panel_ordering.quantity < 99){panel_ordering.quantity++;playState.buildCatalogue();}});
         panel_ordering.quantityText = panel_ordering.add(new SlickUI.Element.Text(120, 106, panel_ordering.quantity + ' copies', 10, styleDark));
 		
