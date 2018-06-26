@@ -132,7 +132,7 @@ function generateTitleShort(interestTag)
 				result = "Did People " + getWord(verbs) + " in " + getRandomOldYear() + "?";
 				break;
 			case 3:
-				result = "A Comprehensive History of " + getWord(nouns_proper);
+				result = "A Complete History of " + getWord(nouns_proper);
 				break;
 		}
         break;
