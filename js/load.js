@@ -1,3 +1,5 @@
+var slickUI;
+
 var loadState = {
 	
 	preload: function() {

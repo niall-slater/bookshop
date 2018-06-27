@@ -1,6 +1,13 @@
 /* GLOBALS */
 
 /*
+TODO:	export to mobile
+TODO:	implement menu and game loop
+TODO:	allow customisation:
+		-name your bookshop
+		-place your bookshop
+		-decorate your bookshop
+		-buy and manage more bookshops
 TODO:	add progression and achievements to reward high popularity and income
 TODO:	spend money for upgrades to bookshop
 TODO:	popularity should have a more obvious impact on foot traffic
@@ -49,7 +56,6 @@ var spawnMax = 10;
 var spawnTimer = spawnMax;
 
 //UI
-var slickUI;
 var tickerText;
 var cash = 250;
 
@@ -102,11 +108,6 @@ var playState = {
     //State Information
 	
 	preload: function() {
-        
-		//Slick UI library
-		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
-		slickUI.load('res/ui/kenney/kenney.json');
-		
 		groupCharacters = game.add.group();
 		groupItems = game.add.group();
 		groupEffects = game.add.group();
