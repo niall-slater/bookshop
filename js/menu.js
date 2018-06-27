@@ -46,7 +46,7 @@ var menuState = {
 		menuStart.panel.buttonCancel.add(new SlickUI.Element.Text(8,4, 'Cancel', 10, styleDark));
 		//name shop
 		menuStart.panel.add(menuStart.panel.nameLabel = new SlickUI.Element.Text(8, 32 * 2 + 2, 'Bookshop Name', 14, styleDark));
-		menuStart.panel.nameField = game.add.inputField(menuStart.panel.x + 14, menuStart.panel.y + 86);
+		menuStart.panel.nameField = game.add.inputField(menuStart.panel.x + 14, menuStart.panel.y + 86, {padding: 4, borderRadius:2});
 		menuStart.panel.nameField.visible = false;
 		menuStart.panel.nameField.setText(shopName);
 		
@@ -75,6 +75,7 @@ var menuState = {
 	
 	cancel: function() {
 		menuStart.panel.visible = false;
+		menuStart.panel.nameField.visible = false;
 		menuMain.panel.visible = true;
 	},
 	

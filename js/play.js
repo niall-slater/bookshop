@@ -390,7 +390,7 @@ var playState = {
 		this.buildStock();
 		
 		slickUI.add(panel_status = new SlickUI.Element.Panel(8, 50, 336, 160));
-        panel_status.add(new SlickUI.Element.Text(10,0, "Bookseller's Computer", 10, styleDark));
+        panel_status.add(new SlickUI.Element.Text(10,0, shopName, 10, styleDark));
         panel_status.visible = false;
         panel_status.add(panel_status.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_status.exitButton.events.onInputUp.add(this.closeMenuStatus);
