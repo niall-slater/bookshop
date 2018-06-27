@@ -114,6 +114,8 @@ var playState = {
 		groupText = game.add.group();
         
         game.stage.disableVisibilityChange = true;
+		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
+		slickUI.load('res/ui/kenney/kenney.json');
 	},
 
 	create: function () {
