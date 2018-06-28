@@ -57,17 +57,13 @@ var spawnTimer = spawnMax;
 
 //UI
 var tickerText;
-var cash = 250;
 
 var stockIndex = 0;
 
 var newsTimer;
 var newsInterval = 30;
-var bookCatalogue = [];
-var bookStock = [];
 var markup = 1.25;
 
-var popularity = 20;
 var popularityMin = 0;
 var popularityMax = 100;
 
@@ -79,6 +75,15 @@ var fontStyle = { font: "10px sans-serif", fill: "#fff", boundsAlignH: "left", b
 var styleDark = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330, fontWeight: 600};
 var styleDarkWrap = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "top", wordWrap: "true", wordWrapWidth: 70, fontWeight: 600};
 var styleDarkSmall = { font: "8px sans-serif", fill: "#333", fontWeight: 600};
+var styleTitle = { font: "20px sans-serif", fill: "#333", fontweight: 800};
+
+var gameData = {
+	shopName: 'Bookshop',
+	cash: 250,
+	bookCatalogue: [],
+	bookStock: [],
+	popularity: 20
+};
 
 
 /* SLICK COMPONENTS */
@@ -228,7 +233,7 @@ var playState = {
         //Calculate and deduct expenditure from cash
 		expenditureTimer -= game.time.physicsElapsed;
 		if (expenditureTimer <= 0) {
-            expenditure = bookStock.length;
+            expenditure = gameData.bookStock.length;
 			this.changeCash(-expenditure);
 			expenditureTimer = expenditureInterval;
 		}
@@ -240,7 +245,7 @@ var playState = {
 		//How much does public opinion affect book buying urges?
 		let publicOpinionCoefficient = 0.2;
 		
-		let spawnModifier = totalInterest * publicOpinionCoefficient * popularity;
+		let spawnModifier = totalInterest * publicOpinionCoefficient * gameData.popularity;
 		
 		spawnModifier *= 0.1;
 		
@@ -258,8 +263,8 @@ var playState = {
 		//Reduce demand for individual books the older they get
 		let demandDecayRate = 1;
 		
-		for (var i = 0; i < bookStock.length; i++) {
-			let book = bookStock[i];
+		for (var i = 0; i < gameData.bookStock.length; i++) {
+			let book = gameData.bookStock[i];
 			if (i.demand > 0) {
 				i.demand -= game.time.physicsElapsed * demandDecayRate;
 			} else {
@@ -277,12 +282,12 @@ var playState = {
 	generateBooks: function() {
         let numBooks = 4;
         for (var i = 0; i < numBooks; i++) {
-			bookCatalogue.push(this.generateBook());
+			gameData.bookCatalogue.push(this.generateBook());
         }	
 	},
 	
 	getNewCatalogue: function() {
-		bookCatalogue = [];
+		gameData.bookCatalogue = [];
 		playState.generateBooks();
 		playState.buildCatalogue();
 	},
@@ -357,7 +362,7 @@ var playState = {
         
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(8, 50, 336, 140));
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
-        panel_ordering.add(panel_ordering.cashReadout = new SlickUI.Element.Text(120,0, "Money: £" + cash, 10, styleDark));
+        panel_ordering.add(panel_ordering.cashReadout = new SlickUI.Element.Text(120,0, "Money: £" + gameData.cash, 10, styleDark));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
 		panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
@@ -390,16 +395,20 @@ var playState = {
 		this.buildStock();
 		
 		slickUI.add(panel_status = new SlickUI.Element.Panel(8, 50, 336, 160));
-        panel_status.add(new SlickUI.Element.Text(10,0, shopName, 10, styleDark));
+        panel_status.add(new SlickUI.Element.Text(10,0, gameData.shopName, 10, styleDark));
         panel_status.visible = false;
         panel_status.add(panel_status.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_status.exitButton.events.onInputUp.add(this.closeMenuStatus);
         panel_status.exitButton.add(new SlickUI.Element.Text(1,-3,'x', 10, styleDark));
 		
-        panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: £' + cash, 10, styleDark));
-        panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 1), 'Popularity: ' + popularity, 10, styleDark));
+        panel_status.cashText = panel_status.add(new SlickUI.Element.Text(12, 22,'Money: £' + gameData.cash, 10, styleDark));
+        panel_status.popularityText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 1), 'Popularity: ' + gameData.popularity, 10, styleDark));
         panel_status.interestText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 2), "There aren't any trends at the moment.", 10, styleDark));
         panel_status.expenditureText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 3), "Current expenditure is: " + expenditure, 10, styleDark));
+		
+        panel_status.add(panel_status.saveButton = new SlickUI.Element.Button(280, 100, 80, 32));
+       	panel_status.saveButton.events.onInputUp.add(this.saveGame);
+        panel_status.saveButton.add(new SlickUI.Element.Text(1,-3,'Save game', 10, styleDark));
 		
 		this.buildStatus();
 		
@@ -414,16 +423,16 @@ var playState = {
 		
 		panel_ordering.quantityText.value = panel_ordering.quantity + ' copies';
 		
-        for (var i = 0; i < bookCatalogue.length; i++) {
+        for (var i = 0; i < gameData.bookCatalogue.length; i++) {
             let slab;
-			let sprite = game.make.sprite(0,0, 'sprite_book' + bookCatalogue[i].spriteIndex);
+			let sprite = game.make.sprite(0,0, 'sprite_book' + gameData.bookCatalogue[i].spriteIndex);
             panel_ordering.carousel.add(slab = new SlickUI.Element.Button(6 + (80 * i), 16, 80, 80));
             slab.add(slab.icon = new SlickUI.Element.DisplayObject(2, 2, sprite));
-			let bonusString = "+" + bookCatalogue[i].tag;
+			let bonusString = "+" + gameData.bookCatalogue[i].tag;
 			slab.add(slab.bonusText = new SlickUI.Element.Text(20,4, bonusString, 6, styleDarkSmall, 20, 40));
-            slab.add(slab.title = new SlickUI.Element.Text(2,20, bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
+            slab.add(slab.title = new SlickUI.Element.Text(2,20, gameData.bookCatalogue[i].title, 9, styleDarkWrap, 40, 80));
 			slab.title.text.lineSpacing = -8;
-            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + bookCatalogue[i].cost, 10, styleDark));
+            slab.add(slab.cost = new SlickUI.Element.Text(2, 60, "£" + gameData.bookCatalogue[i].cost, 10, styleDark));
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
 			panel_ordering.slabs.push(slab);
         }
@@ -438,22 +447,22 @@ var playState = {
         panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), 340, 160));
 		
 		let maxInList = 4;
-		let booksToList = Math.min(maxInList, bookStock.length - stockIndex);
+		let booksToList = Math.min(maxInList, gameData.bookStock.length - stockIndex);
 		
         for (var i = stockIndex; i < stockIndex + booksToList; i++) {
             let slab;
             let title;
             let remainder;
-			let sprite = game.make.sprite(0,0, 'sprite_book' + bookStock[i].spriteIndex);
+			let sprite = game.make.sprite(0,0, 'sprite_book' + gameData.bookStock[i].spriteIndex);
             panel_stock.carousel.add(slab = new SlickUI.Element.Panel(6, 12 + (30 * (i - stockIndex)), 280, 30));
 			slab.add(icon = new SlickUI.Element.DisplayObject(0, 2, sprite));
-			let displayedTitle = bookStock[i].title;
+			let displayedTitle = gameData.bookStock[i].title;
 			if (displayedTitle.length >= 25) {
 				displayedTitle = displayedTitle.substr(0, 25) + "...";
 			}
             slab.add(title = new SlickUI.Element.Text(18,2, displayedTitle, 9, styleDark, 180, 30));
 			title.text.lineSpacing = -8;
-            slab.add(remainder = new SlickUI.Element.Text(170, 2, "In stock: " + bookStock[i].amount, 10, styleDark));
+            slab.add(remainder = new SlickUI.Element.Text(170, 2, "In stock: " + gameData.bookStock[i].amount, 10, styleDark));
 			let returnButton;
 			slab.add(returnButton = new SlickUI.Element.Button(228, 1, 40, 20));
 			returnButton.add(new SlickUI.Element.Text(2,0, "Return", 9, styleDarkSmall));
@@ -473,8 +482,8 @@ var playState = {
 		panel_stock.carousel.add(button_next = new SlickUI.Element.Button(300, 100, 20, 20));
 		button_next.events.onInputUp.add(function(){
 			stockIndex += 1;
-			if (stockIndex > bookStock.length - maxInList)
-				stockIndex = bookStock.length - maxInList;
+			if (stockIndex > gameData.bookStock.length - maxInList)
+				stockIndex = gameData.bookStock.length - maxInList;
 			playState.buildStock();
 		});
 		button_next.add(new SlickUI.Element.Text(4, 0, "v", 10, styleDark));
@@ -482,8 +491,8 @@ var playState = {
 	
 	buildStatus: function() {
 		
-		panel_status.cashText.value = 'Money: £' + cash;
-		panel_status.popularityText.value = 'Popularity: ' + popularity;
+		panel_status.cashText.value = 'Money: £' + gameData.cash;
+		panel_status.popularityText.value = 'Popularity: ' + gameData.popularity;
 		if (topInterest === undefined) {
 			topInterest = 'nothing in particular';
 		}
@@ -535,16 +544,16 @@ var playState = {
 	
 	orderBook: function(i) {
 		
-		let spend = bookCatalogue[i].cost * panel_ordering.quantity;
+		let spend = gameData.bookCatalogue[i].cost * panel_ordering.quantity;
 		
-		if (spend > cash) {
+		if (spend > gameData.cash) {
 			return;
 		}
 		this.changeCash(-spend);
-		let book = bookCatalogue[i];
+		let book = gameData.bookCatalogue[i];
 		book.amount = panel_ordering.quantity;
-		bookStock.push(book)
-		bookCatalogue[i] = this.generateBook();
+		gameData.bookStock.push(book)
+		gameData.bookCatalogue[i] = this.generateBook();
 		
 		//Spawn a bonus customer burst if you choose a popular book
 		if (book.tag === topInterest) {
@@ -563,7 +572,7 @@ var playState = {
 	
 	returnBook: function(book) {
 		book.amount = 0;
-		bookStock.splice(bookStock.indexOf(book), 1);
+		gameData.bookStock.splice(gameData.bookStock.indexOf(book), 1);
 		this.buildStock();
 	},
 	
@@ -574,37 +583,46 @@ var playState = {
 	
 	
 	popularityIncrease: function(amount) {
-		if (popularity < popularityMax) {
-			popularity += amount;
+		if (gameData.popularity < popularityMax) {
+			gameData.popularity += amount;
 		} else {
-			popularity = popularityMax;
+			gameData.popularity = popularityMax;
 		}
 		
 		this.buildStatus();
 	},
 
 	popularityDecrease: function(amount) {
-		if (popularity > popularityMin) {
-			popularity -= amount;
+		if (gameData.popularity > popularityMin) {
+			gameData.popularity -= amount;
 		} else {
-			popularity = popularityMin;
+			gameData.popularity = popularityMin;
 		}
 
 		this.buildStatus();
 	},
 	
 	changeCash: function(amount) {
-		cash += amount;
+		gameData.cash += amount;
 		this.buildStatus();
-		panel_ordering.cashReadout.value = "Money: £" + cash;
+		panel_ordering.cashReadout.value = "Money: £" + gameData.cash;
 	},
 	
 	makeSale: function(book) {
 		this.changeCash(book.cost * markup);
 		book.amount--;
 		if (book.amount < 1) {
-			bookStock.splice(bookStock.indexOf(book), 1);
+			gameData.bookStock.splice(gameData.bookStock.indexOf(book), 1);
 		}
 		this.buildStock();
+	},
+	
+	saveGame: function() {
+		
+		var saveObject = gameData;
+
+		localStorage.setItem("save_" + gameData.shopName, JSON.stringify(saveObject));
+		
+		console.log('Saved game as ' + "save_" + gameData.shopName);
 	}
 };

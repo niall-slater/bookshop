@@ -49,7 +49,7 @@ class Customer extends Phaser.Sprite {
 					//Randomly choose whether to buy this book or browse for another
 					if (Math.random() < decisiveness) {
 						//BUY!
-    					if (bookStock.length < 1) {
+    					if (gameData.bookStock.length < 1) {
 							this.say('No new books?');
 							playState.popularityDecrease(2);
 							if (Math.random() > 0.5) {
@@ -118,14 +118,14 @@ class Customer extends Phaser.Sprite {
     }
     
 	selectBook() {
-		let result = bookStock[Math.floor(Math.random() * bookStock.length)];
+		let result = gameData.bookStock[Math.floor(Math.random() * gameData.bookStock.length)];
 		
 		//Loop through stocked books and *probably* pick the one with the highest current interest
 		let bestInterest = 0;
 		let peerPressureCoefficient = 0.9;
 		
 		//get the most popular book
-		for (var b in bookStock) {
+		for (var b in gameData.bookStock) {
 			if (currentInterests[b.tag] > bestInterest) {
 				bestInterest = currentInterests[b.tag];
 				result = b;
@@ -144,7 +144,7 @@ class Customer extends Phaser.Sprite {
 		//this makes unpopular books stay on the shelf forever until you return them at a loss
 		let cantShiftThisBookDemandThreshold = 5;
 		if (Math.random() > peerPressureCoefficient || result.demand < cantShiftThisBookDemandThreshold) {
-			result = bookStock[Math.floor(Math.random() * bookStock.length)];
+			result = gameData.bookStock[Math.floor(Math.random() * gameData.bookStock.length)];
 		}
 		
 		return result;
