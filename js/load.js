@@ -31,6 +31,7 @@ var loadState = {
 		game.load.image('particle_puff', 'res/objects/particle.png');
 		
         //UI images
+        game.load.image('sprite_title', 'res/ui/title.png');
         game.load.image('sheet_books', 'res/ui/sheet_books.png', 16, 16, 12, 0, 0);
 		
 		for (var i = 0; i < 12; i++) {

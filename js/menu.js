@@ -20,10 +20,10 @@ var menuState = {
 		//set up main menu panel
 		slickUI.add(menuMain.panel = new SlickUI.Element.Panel(0, 0, mapWidthDefault, mapHeightDefault));
 		
-		menuMain.panel.add(menuMain.panel.title = new SlickUI.Element.Text(50, 5, 'Super Sim Bookshop 2002', 14, styleTitle));
-		menuMain.panel.add(menuMain.panel.buttonNewGame = new SlickUI.Element.Button(2, 40, 200, 32));
+		menuMain.panel.add(menuMain.panel.title = new SlickUI.Element.DisplayObject(menuMain.panel.width/2 - 400/2, 2, game.make.sprite(0, 0, 'sprite_title')));
+		menuMain.panel.add(menuMain.panel.buttonNewGame = new SlickUI.Element.Button(2, 100, 200, 32));
 		menuMain.panel.buttonNewGame.add(new SlickUI.Element.Text(8,4, 'New Game', 10, styleDark));
-		menuMain.panel.add(menuMain.panel.buttonLoadGame = new SlickUI.Element.Button(2, 32 + 32 + 14, 200, 32));
+		menuMain.panel.add(menuMain.panel.buttonLoadGame = new SlickUI.Element.Button(2, 100 + 32 + 14, 200, 32));
 		menuMain.panel.buttonLoadGame.add(new SlickUI.Element.Text(8,4, 'Load Game', 10, styleDark));
 		
 		
