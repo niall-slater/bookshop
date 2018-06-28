@@ -2,19 +2,16 @@
 
 /*
 TODO:	export to mobile
-TODO:	implement menu and game loop
 TODO:	allow customisation:
-		-name your bookshop
 		-place your bookshop
 		-decorate your bookshop
+            -game save should include messes and customers/authors
 		-buy and manage more bookshops
 TODO:	add progression and achievements to reward high popularity and income
 TODO:	spend money for upgrades to bookshop
 TODO:	popularity should have a more obvious impact on foot traffic
 TODO:	bad decisions should impact gameplay
-TODO:	authors should move faster the longer the game goes on
-TODO:	there should be an option to return books that haven't
-		sold at a penalty
+TODO:	authors should move faster the longer the game goes on (?)
 */
 
 //Groups
@@ -395,7 +392,7 @@ var playState = {
 		this.buildStock();
 		
 		slickUI.add(panel_status = new SlickUI.Element.Panel(8, 50, 336, 160));
-        panel_status.add(new SlickUI.Element.Text(10,0, gameData.shopName, 10, styleDark));
+        panel_status.add(new SlickUI.Element.Text(10,0, gameData.shopName, 10, styleTitle));
         panel_status.visible = false;
         panel_status.add(panel_status.exitButton = new SlickUI.Element.Button(310, 0, 16, 16));
        	panel_status.exitButton.events.onInputUp.add(this.closeMenuStatus);
@@ -406,9 +403,9 @@ var playState = {
         panel_status.interestText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 2), "There aren't any trends at the moment.", 10, styleDark));
         panel_status.expenditureText = panel_status.add(new SlickUI.Element.Text(12, 22 + (12 * 3), "Current expenditure is: " + expenditure, 10, styleDark));
 		
-        panel_status.add(panel_status.saveButton = new SlickUI.Element.Button(280, 100, 80, 32));
+        panel_status.add(panel_status.saveButton = new SlickUI.Element.Button(260, 126, 80, 32));
        	panel_status.saveButton.events.onInputUp.add(this.saveGame);
-        panel_status.saveButton.add(new SlickUI.Element.Text(1,-3,'Save game', 10, styleDark));
+        panel_status.saveButton.add(new SlickUI.Element.Text(0,0,'Save game', 10, styleDark));
 		
 		this.buildStatus();
 		
@@ -618,11 +615,16 @@ var playState = {
 	},
 	
 	saveGame: function() {
+        
+        let id = 'save_' + gameData.shopName;
 		
 		var saveObject = gameData;
-
-		localStorage.setItem("save_" + gameData.shopName, JSON.stringify(saveObject));
-		
-		console.log('Saved game as ' + "save_" + gameData.shopName);
+        
+		localStorage.setItem(id, JSON.stringify(saveObject));
+        
+        //TODO: maintain a list of saves in local storage and load it every time,
+        //      then push new saves to the end of that list for use in the loadgame screen.
+        
+		console.log('Saved game as ' + id);
 	}
 };

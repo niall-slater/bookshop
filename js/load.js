@@ -1,5 +1,7 @@
 var slickUI;
 
+var savedGames = [];
+
 var loadState = {
 	
 	preload: function() {
