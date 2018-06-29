@@ -1,6 +1,6 @@
 var tags = ["technology", "politics", "space", "nature", "business", "mindfulness", "history", "music", "gaming", "fantasy"];
 
-var nounsTechnology = ["computer", "processor", "self-driving car", "drone", "machine", "blockchain", "laptop", "app", "cryptocurrency", "robot", "magnet", "dongle"];
+var nounsTechnology = ["computer", "processor", "self-driving car", "drone", "machine", "blockchain", "laptop", "app", "bitcoin knockoff", "robot", "magnet", "dongle"];
 
 var nounsPolitics = ["ministry", "chamber", "referendum", "filibuster", "campaign", "cabinet", "scandal", "presidency"];
 

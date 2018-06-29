@@ -371,7 +371,7 @@ var playState = {
 		panel_ordering.add(panel_ordering.quantityUp = new SlickUI.Element.Button(170, 104, 20, 18));
         panel_ordering.quantityDown.add(new SlickUI.Element.Text(3,-2,'-', 10, styleDark));
         panel_ordering.quantityUp.add(new SlickUI.Element.Text(3,-2,'+', 10, styleDark));
-		panel_ordering.quantity = 10;
+		panel_ordering.quantity = 5;
 		panel_ordering.quantityDown.events.onInputUp.add(function(){if (panel_ordering.quantity > 1){panel_ordering.quantity--;playState.buildCatalogue();}});
 		panel_ordering.quantityUp.events.onInputUp.add(function(){if (panel_ordering.quantity < 99){panel_ordering.quantity++;playState.buildCatalogue();}});
         panel_ordering.quantityText = panel_ordering.add(new SlickUI.Element.Text(120, 106, panel_ordering.quantity + ' copies', 10, styleDark));
@@ -447,6 +447,11 @@ var playState = {
 		let booksToList = Math.min(maxInList, gameData.bookStock.length - stockIndex);
 		
         for (var i = stockIndex; i < stockIndex + booksToList; i++) {
+			
+			if (gameData.bookStock.length < 1) {
+				break;
+			}
+			
             let slab;
             let title;
             let remainder;
@@ -463,7 +468,10 @@ var playState = {
 			let returnButton;
 			slab.add(returnButton = new SlickUI.Element.Button(228, 1, 40, 20));
 			returnButton.add(new SlickUI.Element.Text(2,0, "Return", 9, styleDarkSmall));
-			returnButton.events.onInputUp.add(function(){playState.returnBook(displayedTitle);});
+			
+			let currentBook = gameData.bookStock[i];
+			
+			returnButton.events.onInputUp.add(function(){playState.returnBook(currentBook);});
         }
 		
 		let button_prev;
@@ -500,13 +508,15 @@ var playState = {
     
 	generateBook: function() {
 		let chosenTag = pickRandomTag();
+		let chosenTitle = generateTitleShort(chosenTag);
 		let book = {
 			tag: chosenTag,
-			title: generateTitleShort(chosenTag),
+			title: chosenTitle,
 			author: generateName(),
 			cost: this.generateCost(),
 			spriteIndex: Math.floor(Math.random()*12),
-			demand: 100
+			demand: 100,
+			id: chosenTitle + '_' + Math.floor(Math.random()*99)
 		};
 		return book;
 	},
@@ -569,7 +579,8 @@ var playState = {
 	
 	returnBook: function(book) {
 		book.amount = 0;
-		gameData.bookStock.splice(gameData.bookStock.indexOf(book), 1);
+		let index = gameData.bookStock.findIndex(i => i.id === book.id);
+		gameData.bookStock.splice(index, 1);
 		this.buildStock();
 	},
 	

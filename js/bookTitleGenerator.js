@@ -10,7 +10,7 @@ var verbs = ["catch", "study", "follow", "love", "build", "kiss", "smaench", "ea
 
 var problems = ["Conundrum", "Case", "Affair", "Problem", "Referendum", "Decision", "Ultimatum", "Incident", "Resignation", "Discovery", "Rejection", "Cock-Up", "Disaster", "Campaign", "Murder", "Throwdown", "Betrayal"];
 
-var adjectives = ["Engorged", "Slippery", "Fast", "Wanted", "Dangerous", "Heartbreaking", "Subversive", "Racist", "Nice", "Aromatic", "Broken"];
+var adjectives = ["Engorged", "Slippery", "Fast", "Wanted", "Dangerous", "Heartbreaking", "Subversive", "Racist", "Nice", "Aromatic", "Broken", "Forgettable"];
 
 var nouns_proper = ["Smaenching", "Plague", "Suffering", "Pleasure", "Food", "Stuff", "Complaining", "Torture", "Fun", "Bookselling", "Piling up Rocks", "Wasting Time", "Faffing About"];
 
@@ -68,7 +68,7 @@ function generateTitleShort(interestTag)
 				result = getWord(verbs) + " Me in the " + getWord(nounsSpace);
 				break;
 			case 3:
-				result = "Would You " + getWord(verbs) + " in Space?";
+				result = "Can You " + getWord(verbs) + " in Space?";
 				break;
 		}
         break;
