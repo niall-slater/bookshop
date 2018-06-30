@@ -1,7 +1,7 @@
-var mapWidthDefault = 352;
-var mapHeightDefault = 224;
+var gameWidth = 480; //was 352
+var gameHeight = 320; //was 224
 
-var game = new Phaser.Game(mapWidthDefault, mapHeightDefault, 'game', false, false);
+var game = new Phaser.Game(gameWidth, gameHeight, 'game', false, false);
 
 game.antialias = false;
 

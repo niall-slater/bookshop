@@ -3,6 +3,17 @@
 let menuMain = {};
 let menuStart = {};
 
+//UI values
+let uiSize = {
+	buttonWidth: 128,
+	buttonHeight: 32,
+	margin: 4,
+	panelX: 4,
+	panelY: 80,
+	panelWidth: 480-8,
+	panelHeight: 320-120
+};
+
 var menuState = {
 	
 	preload: function() {
@@ -18,13 +29,13 @@ var menuState = {
 		let panel;
 		
 		//set up main menu panel
-		slickUI.add(menuMain.panel = new SlickUI.Element.Panel(0, 0, mapWidthDefault, mapHeightDefault));
+		slickUI.add(menuMain.panel = new SlickUI.Element.Panel(0, 0, gameWidth, gameHeight));
 		
-		menuMain.panel.add(menuMain.panel.title = new SlickUI.Element.DisplayObject(menuMain.panel.width/2 - 400/2, 2, game.make.sprite(0, 0, 'sprite_title')));
-		menuMain.panel.add(menuMain.panel.buttonNewGame = new SlickUI.Element.Button(2, 100, 200, 32));
-		menuMain.panel.buttonNewGame.add(new SlickUI.Element.Text(8,4, 'New Game', 10, styleDark));
-		menuMain.panel.add(menuMain.panel.buttonLoadGame = new SlickUI.Element.Button(2, 100 + 32 + 14, 200, 32));
-		menuMain.panel.buttonLoadGame.add(new SlickUI.Element.Text(8,4, 'Load Game', 10, styleDark));
+		menuMain.panel.add(menuMain.panel.title = new SlickUI.Element.DisplayObject(0, 0, game.make.sprite(0, 0, 'sprite_title')));
+		menuMain.panel.add(menuMain.panel.buttonNewGame = new SlickUI.Element.Button(gameWidth/2-uiSize.buttonWidth/2, 100, uiSize.buttonWidth, uiSize.buttonHeight));
+		menuMain.panel.buttonNewGame.add(new SlickUI.Element.Text(0,0, 'New Game', 10, styleDarkBig)).centerHorizontally();
+		menuMain.panel.add(menuMain.panel.buttonLoadGame = new SlickUI.Element.Button(gameWidth/2-uiSize.buttonWidth/2, 100 + 32 + 14, uiSize.buttonWidth, uiSize.buttonHeight));
+		menuMain.panel.buttonLoadGame.add(new SlickUI.Element.Text(0,0, 'Load Game', 10, styleDarkBig)).centerHorizontally();
 		
 		
 		//set button functions
@@ -33,18 +44,18 @@ var menuState = {
 		
 		
 		//set up new game panel
-		slickUI.add(menuStart.panel = new SlickUI.Element.Panel(0, 0, mapWidthDefault, mapHeightDefault));
+		slickUI.add(menuStart.panel = new SlickUI.Element.Panel(0, 0, gameWidth, gameHeight));
 		//title
-		menuStart.panel.add(menuStart.panel.title = new SlickUI.Element.Text(80, 5, 'New Game', 14, styleTitle));
+		menuStart.panel.add(menuStart.panel.title = new SlickUI.Element.Text(0, 12, 'New Game', 14, styleTitle)).centerHorizontally();
 		//start button
-		menuStart.panel.add(menuStart.panel.buttonStart = new SlickUI.Element.Button(200, 32*5+14, 100, 32));
-		menuStart.panel.buttonStart.add(new SlickUI.Element.Text(8,4, 'Start', 10, styleDark));
+		menuStart.panel.add(menuStart.panel.buttonStart = new SlickUI.Element.Button(menuStart.panel.width - uiSize.buttonWidth, menuStart.panel.height - uiSize.buttonHeight, uiSize.buttonWidth, uiSize.buttonHeight));
+		menuStart.panel.buttonStart.add(new SlickUI.Element.Text(0,0, 'Start', 10, styleDarkBig)).centerHorizontally();
 		//cancel button
-		menuStart.panel.add(menuStart.panel.buttonCancel = new SlickUI.Element.Button(2, 32*5+14, 100, 32));
-		menuStart.panel.buttonCancel.add(new SlickUI.Element.Text(8,4, 'Cancel', 10, styleDark));
+		menuStart.panel.add(menuStart.panel.buttonCancel = new SlickUI.Element.Button(0, menuStart.panel.height - uiSize.buttonHeight, uiSize.buttonWidth, uiSize.buttonHeight));
+		menuStart.panel.buttonCancel.add(new SlickUI.Element.Text(0,0, 'Cancel', 10, styleDarkBig)).centerHorizontally();
 		//name shop
-		menuStart.panel.add(menuStart.panel.nameLabel = new SlickUI.Element.Text(8, 32 + 2, 'Bookshop Name', 14, styleDark));
-		menuStart.panel.nameField = game.add.inputField(menuStart.panel.x + 14, menuStart.panel.y + 56, {padding: 4, borderRadius:2});
+		menuStart.panel.add(menuStart.panel.nameLabel = new SlickUI.Element.Text(uiSize.buttonWidth/2, uiSize.buttonHeight * 1.3, 'Bookshop Name', 14, styleDark));
+		menuStart.panel.nameField = game.add.inputField(uiSize.buttonWidth/2,  uiSize.buttonHeight * 2, {padding: 4, borderRadius:2});
 		menuStart.panel.nameField.visible = false;
 		menuStart.panel.nameField.setText(gameData.shopName);
 		

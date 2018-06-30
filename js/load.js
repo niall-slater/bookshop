@@ -2,6 +2,16 @@ var slickUI;
 
 var savedGames = [];
 
+
+var fontStyle = { font: "10px sans-serif", fill: "#fff", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330};
+var styleDark = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "bottom", wordWrap: "true", wordWrapWidth: 330, fontWeight: 600};
+var styleDarkWrap = { font: "10px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "top", wordWrap: "true", wordWrapWidth: 90, fontWeight: 600};
+var styleBookTitle = { font: "12px sans-serif", fill: "#333", boundsAlignH: "left", boundsAlignV: "top", wordWrap: "true", wordWrapWidth: 90, fontWeight: 600};
+var styleDarkBig = { font: "15px sans-serif", fill: "#333", fontWeight: 600, boundsAlignV: "top"};
+var styleDarkSmall = { font: "8px sans-serif", fill: "#333", fontWeight: 600};
+var styleTitle = { font: "20px sans-serif", fill: "#333", fontweight: 800};
+var styleTicker = { font: "14px sans-serif", fill: "#eee", fontweight: 800};
+
 var loadState = {
 	
 	preload: function() {
