@@ -1,5 +1,5 @@
 var gameWidth = 480; //was 352
-var gameHeight = 320; //was 224
+var gameHeight = 270; //was 224
 
 var game = new Phaser.Game(gameWidth, gameHeight, 'game', false, false);
 

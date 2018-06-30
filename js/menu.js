@@ -9,9 +9,9 @@ let uiSize = {
 	buttonHeight: 32,
 	margin: 4,
 	panelX: 4,
-	panelY: 80,
+	panelY: 72,
 	panelWidth: 480-8,
-	panelHeight: 320-120
+	panelHeight: 270-78
 };
 
 var menuState = {

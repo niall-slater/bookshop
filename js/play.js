@@ -438,7 +438,7 @@ var playState = {
 		
         panel_stock.carousel = panel_stock.add(new SlickUI.Element.DisplayObject(0, 2, game.make.sprite(0,0, ''), panel_stock.width, panel_stock.height));
 		
-		let maxInList = 6;
+		let maxInList = 5;
 		let booksToList = Math.min(maxInList, gameData.bookStock.length - stockIndex);
 		
         for (var i = stockIndex; i < stockIndex + booksToList; i++) {
