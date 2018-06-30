@@ -1,7 +1,6 @@
 /* GLOBALS */
 
 /*
-TODO:	export to mobile
 TODO:	allow customisation:
 		-place your bookshop
 		-decorate your bookshop
@@ -32,21 +31,23 @@ var map;
 //Nav
 var navPoints_books;
 
+var tileSize = 16;
+
 var point_enter = {
 	x: 8,
-	y: 72
+	y: tileSize * 4 + 8
 }
 var point_exit = {
 	x: 8,
-	y: 120
+	y: tileSize * 11 + 8
 }
 var point_buy = {
-	x: 280,
-	y: 88
+	x: tileSize * 25 + 8,
+	y: tileSize * 7 + 8
 }
 var point_bookseller = {
-	x: 312,
-	y: 88
+	x: tileSize * 27 + 8,
+	y: tileSize * 7 + 8
 }
 
 var spawnMax = 10;
@@ -158,13 +159,13 @@ var playState = {
 			{x: 232, y: 56},
 			{x: 248, y: 56},
 			{x: 264, y: 56},
-			{x: 88, y: 88},
-			{x: 88, y: 136},
-			{x: 136, y: 88},
-			{x: 136, y: 136},
-			{x: 200, y: 88},
-			{x: 200, y: 136},
-			{x: 248, y: 136}
+			{x: 88 + 16, y: 88 + 16},
+			{x: 88 + 16, y: 136 + 16},
+			{x: 136 + 16, y: 88} + 16,
+			{x: 136 + 16, y: 136 + 16},
+			{x: 200 + 16, y: 88 + 16},
+			{x: 200 + 16, y: 136 + 16},
+			{x: 248 + 16, y: 136 + 16}
 		];		
 		//At this point I'm hardcoding them but the easiest dynamic way (if needed) would be to read
 		//directly from the Tiled JSON export. Don't use the Phaser functions for this.
