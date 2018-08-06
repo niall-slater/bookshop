@@ -41,6 +41,7 @@ var loadState = {
 		}
 		
 		game.load.image('particle_puff', 'res/objects/particle.png');
+		game.load.image('sprite_bookTrolley', 'res/objects/bookTrolley.png');
 		
         //UI images
         game.load.image('sprite_title', 'res/ui/title.png');

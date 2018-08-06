@@ -1,6 +1,7 @@
 /* GLOBALS */
 
 /*
+//not these
 TODO:	allow customisation:
 		-place your bookshop
 		-decorate your bookshop
@@ -11,6 +12,12 @@ TODO:	spend money for upgrades to bookshop
 TODO:	popularity should have a more obvious impact on foot traffic
 TODO:	bad decisions should impact gameplay
 TODO:	authors should move faster the longer the game goes on (?)
+
+//these
+TODO:   comfy audio
+TODO:   shelving books
+TODO:   better news ticker
+TODO:   buy upgrades
 */
 
 //Groups
@@ -570,6 +577,8 @@ var playState = {
 		
 		this.buildCatalogue();
 		this.buildStock();
+        
+        game.time.events.add(1500, function(){new Trolley(game, 0, 0)}, this);
 	},
 	
 	returnBook: function(book) {
