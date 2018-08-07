@@ -84,6 +84,9 @@ var gameData = {
 	popularity: 20
 };
 
+//Array to hold the books we're ordering
+var currentOrder = [];
+
 
 /* SLICK COMPONENTS */
 var button_buy;
@@ -198,6 +201,22 @@ var playState = {
 	
 	update: function() {
 		
+		if (gameData.popularity > 95) {
+            tickerText.text = "You're the best shop in town!";
+        }
+		if (gameData.popularity > 55) {
+            tickerText.text = "You're doing really well.";
+        }
+        if (gameData.popularity < 15) {
+            tickerText.text = "Warning! Popularity below 15!";
+        }
+        if (gameData.popularity < 5) {
+            tickerText.text = "Popularity below 5! You'll have to close if things don't improve!";
+        }
+		if (gameData.popularity <= 0) {
+            tickerText.text = "Popularity is 0! Game over!";
+        }
+        
 		//The timer that triggers news events
 		newsTimer -= game.time.physicsElapsed;
 		if (newsTimer <= 0) {
@@ -207,7 +226,6 @@ var playState = {
 			newsTimer = newsInterval;
 			currentInterests[newsStory.tag] = Math.floor(Math.random()*15) + 5;
 		}
-		
 		
 		//Keep track of how much interest there is in books
 		let totalInterest = 0;
@@ -361,6 +379,7 @@ var playState = {
         slickUI.add(panel_ordering = new SlickUI.Element.Panel(uiSize.panelX, uiSize.panelY, uiSize.panelWidth, uiSize.panelHeight));
         panel_ordering.add(new SlickUI.Element.Text(10,0, "Books Catalogue", 10, styleDark));
         panel_ordering.add(panel_ordering.cashReadout = new SlickUI.Element.Text(120,0, "Funds: £" + gameData.cash, 10, styleDark));
+        panel_ordering.add(panel_ordering.instructions = new SlickUI.Element.Text(240,0, "Put together a book order!", 10, styleDark));
         panel_ordering.visible = false;
         panel_ordering.add(panel_ordering.exitButton = new SlickUI.Element.Button(uiSize.panelWidth - 32, 0, 16, 16));
 		panel_ordering.exitButton.events.onInputUp.add(this.closeMenuCatalogue);
@@ -414,7 +433,7 @@ var playState = {
     },
 	
 	buildCatalogue: function() {
-		
+        
 		for (var i = 0; i < panel_ordering.slabs.length; i++) {
 			panel_ordering.slabs[i].destroy();
 		}
@@ -435,6 +454,11 @@ var playState = {
 			slab.events.onInputUp.add(this.orderBook.bind(this, i));
 			panel_ordering.slabs.push(slab);
         }
+        
+        
+        panel_ordering.add(panel_ordering.submitButton = new SlickUI.Element.Button(uiSize.panelWidth - 90 - uiSize.margin, uiSize.panelHeight - 36, 90, 24));
+       	panel_ordering.submitButton.events.onInputUp.add(this.submitBookOrder);
+        panel_ordering.submitButton.add(panel_ordering.submitButton.label = new SlickUI.Element.Text(4,0,'Send order: ' + currentOrder.length, 10, styleDark));
 	},
 	
 	buildStock: function() {
@@ -498,7 +522,7 @@ var playState = {
 	
 	buildStatus: function() {
 		
-		panel_status.cashText.value = 'Money: £' + gameData.cash;
+		panel_status.cashText.value = 'Funds: £' + gameData.cash;
 		panel_status.popularityText.value = 'Popularity: ' + gameData.popularity;
 		if (topInterest === undefined) {
 			topInterest = 'nothing in particular';
@@ -553,20 +577,18 @@ var playState = {
 	
 	orderBook: function(i) {
 		
+        //Take cash and swap the catalogue entry for a fresh book
+		let book = gameData.bookCatalogue[i];
 		let spend = gameData.bookCatalogue[i].cost * panel_ordering.quantity;
-		
 		if (spend > gameData.cash) {
 			return;
 		}
 		this.changeCash(-spend);
-		let book = gameData.bookCatalogue[i];
-		book.amount = panel_ordering.quantity;
-		gameData.bookStock.push(book)
 		gameData.bookCatalogue[i] = this.generateBook();
 		
 		//Spawn a bonus customer burst if you choose a popular book
 		if (book.tag === topInterest) {
-			let delay = Math.floor(Math.random()*3) + 1;
+			let delay = Math.floor(Math.random()*3) + 5; //Give them a five second delay so the player has time to stock the book
 			let numCustomers = 3 + Math.floor(Math.random() * 5);
 			game.time.events.add(1000 * delay, function(){
 				for (var i = 0; i < numCustomers; i++) {
@@ -574,12 +596,29 @@ var playState = {
 				}
 			}, this);
 		}
-		
-		this.buildCatalogue();
-		this.buildStock();
         
-        game.time.events.add(1500, function(){new Trolley(game, 0, 0)}, this);
+        //Add the book to the order
+		book.amount = panel_ordering.quantity;
+        currentOrder.push(book);
+		
+        //Rebuild the catalogue
+		this.buildCatalogue();
 	},
+    
+    submitBookOrder: function() {
+        if (currentOrder.length < 1) {
+            console.log("Can't submit an empty order");
+            return;   
+        }
+        
+        let submission = currentOrder.slice(0);
+        currentOrder = [];
+        panel_ordering.submitButton.label.text.text = 'Send order: ' + currentOrder.length;
+        let orderDelay = 1500;
+        game.time.events.add(orderDelay, function(){
+            new Trolley(game, 0, 0, submission);
+        }, this);
+    },
 	
 	returnBook: function(book) {
 		book.amount = 0;
@@ -617,7 +656,7 @@ var playState = {
 	changeCash: function(amount) {
 		gameData.cash += amount;
 		this.buildStatus();
-		panel_ordering.cashReadout.value = "Money: £" + gameData.cash;
+		panel_ordering.cashReadout.value = "Funds: £" + gameData.cash;
 	},
 	
 	makeSale: function(book) {

@@ -1,6 +1,6 @@
 class Trolley extends Phaser.Sprite {
     
-    constructor(game, x, y) {
+    constructor(game, x, y, contents) {
         super(game, 0, 0);
          
         Phaser.Sprite.call(this, game, gameWidth + 50, point_bookseller.y + 16, 'sprite_bookTrolley');
@@ -15,9 +15,13 @@ class Trolley extends Phaser.Sprite {
         game.add.existing(this);
         game.physics.arcade.enable(this);
         
+        this.books = contents;
+        
         let targetPos = {x: point_bookseller.x + 16, y: point_bookseller.y + 16};
         
-        game.add.tween(this).to(targetPos, 900, Phaser.Easing.Bounce.In, true);
+        let tween = game.add.tween(this).to(targetPos, 900, Phaser.Easing.Bounce.In, true);
+        
+        tween.onComplete.add(this.onArrive, this);
     }
     
     update() {
@@ -28,8 +32,24 @@ class Trolley extends Phaser.Sprite {
         this.destroy();
     }
     
+    onArrive() {
+        
+    }
+    
 	onTap() {
-        console.log('tapped the books');
+        for (let i = 0; i < this.books.length; i++)
+            gameData.bookStock.push(this.books[i]);
+        
+        playState.buildStock();
+        
+        this.books = [];
+        
+        let targetPos = {x: gameWidth + 50, y: point_bookseller.y + 16};
+
+        let tween = game.add.tween(this).to(targetPos, 900, Phaser.Easing.Bounce.Out, true);
+        
+        tween.onComplete.add(this.die, this);
+
 	}
     
 };
