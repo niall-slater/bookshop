@@ -29,7 +29,7 @@ class Bookseller extends Phaser.Sprite {
     }
 	
 	say(text) {
-		let bubble = new SpeechBubble(game, this.x - 12, this.y - 30, text);
+		let bubble = new SpeechBubble(game, this.x - 22, this.y - 30, text);
 		groupEffects.add(bubble);
 	}
 	

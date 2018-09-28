@@ -86,7 +86,7 @@ class Customer extends Phaser.Sprite {
 					let book = this.selectBook();
 					if (book === undefined) {
 						game.time.events.add(500, this.makeMess, this);
-						this.say('Not for sale?')
+						this.say('Out of stock? Pah!')
 						console.log(this.name + " couldn't find the book they wanted.");
 						playState.popularityDecrease(2);
 						this.behaviour_current = this.behaviours.LEAVE;

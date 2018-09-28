@@ -148,8 +148,8 @@ var playState = {
 		
 		//Create bookseller
 		
-        let bookseller = new Bookseller(game, 0, point_bookseller.x, point_bookseller.y);
-		groupCharacters.add(bookseller);
+        this.bookseller = new Bookseller(game, 0, point_bookseller.x, point_bookseller.y);
+		groupCharacters.add(this.bookseller);
 		
 		//Load nav points
 		

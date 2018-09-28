@@ -20,8 +20,9 @@ class Trolley extends Phaser.Sprite {
         let targetPos = {x: point_bookseller.x + 16, y: point_bookseller.y + 16};
         
         let tween = game.add.tween(this).to(targetPos, 900, Phaser.Easing.Bounce.In, true);
-        
+        	
         tween.onComplete.add(this.onArrive, this);
+		playState.bookseller.say("Order's here!");
     }
     
     update() {
@@ -37,6 +38,9 @@ class Trolley extends Phaser.Sprite {
     }
     
 	onTap() {
+		
+		playState.bookseller.say("I'll stock 'em.");
+		
         for (let i = 0; i < this.books.length; i++)
             gameData.bookStock.push(this.books[i]);
         
@@ -51,5 +55,4 @@ class Trolley extends Phaser.Sprite {
         tween.onComplete.add(this.die, this);
 
 	}
-    
 };
