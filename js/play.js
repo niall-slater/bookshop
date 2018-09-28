@@ -123,9 +123,16 @@ var playState = {
         game.stage.disableVisibilityChange = true;
 		slickUI = game.plugins.add(Phaser.Plugin.SlickUI);
 		slickUI.load('res/ui/kenney/kenney.json');
+		
 	},
 
 	create: function () {
+		
+		gameData.cash = 250;
+		gameData.popularity = 20;
+		
+		console.log("setting popularity to " + gameData.popularity);
+		
 		
 		//Start physics
 		game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -197,6 +204,7 @@ var playState = {
 		newsTimer = 1;
         expenditure = 0;
         expenditureTimer = expenditureInterval;
+		this.buildStatus();
 	},
 	
 	update: function() {
@@ -215,6 +223,7 @@ var playState = {
         }
 		if (gameData.popularity <= 0) {
             tickerText.text = "Popularity is 0! Game over!";
+			game.time.events.add(1000, function(){game.state.start('lose');}, this);
         }
         
 		//The timer that triggers news events
